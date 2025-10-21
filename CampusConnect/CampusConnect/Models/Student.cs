@@ -23,5 +23,7 @@ namespace CampusConnect.Models
         public string Program { get; set; }
 
         public double GPA { get; set; }
+
+        public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
     }
 }

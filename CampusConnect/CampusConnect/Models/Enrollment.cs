@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace CampusConnect.Models
 {
@@ -13,10 +14,11 @@ namespace CampusConnect.Models
         public int CourseId { get; set; }
 
         // Navigation properties
+        [ValidateNever]
         public Student Student { get; set; }
+        [ValidateNever]
         public Course Course { get; set; }
 
-        // Optional: grade or status
-        public string Grade { get; set; }
+        public int? Grade { get; set; }
     }
 }

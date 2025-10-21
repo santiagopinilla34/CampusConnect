@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using CampusConnect.Data;
+﻿using CampusConnect.Data;
 using CampusConnect.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.Buffers;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace CampusConnect.Controllers
@@ -16,9 +19,20 @@ namespace CampusConnect.Controllers
         }
 
         // GET: Students
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Students.ToListAsync());
+            var students = from s in _context.Students
+                           select s;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                students = students.Where(s => s.FirstName.Contains(searchString)
+                                            || s.LastName.Contains(searchString));
+            }
+
+            return View(await students.ToListAsync());
+
+
         }
 
         // GET: Students/Details/5
@@ -26,7 +40,7 @@ namespace CampusConnect.Controllers
         {
             if (id == null) return NotFound();
 
-            var student = await _context.Students.FirstOrDefaultAsync(s => s.StudentId == id);
+            var student = await _context.Students.Include(s => s.Enrollments).ThenInclude(e => e.Course).FirstOrDefaultAsync(m => m.StudentId == id);
             if (student == null) return NotFound();
 
             return View(student);
@@ -113,5 +127,38 @@ namespace CampusConnect.Controllers
         {
             return _context.Students.Any(e => e.StudentId == id);
         }
+
+
+        public IActionResult Enroll(int id)
+        {
+            var student = _context.Students.Find(id);
+            if (student == null) return NotFound();
+
+            ViewBag.Courses = new SelectList(_context.Courses, "CourseId", "Title");
+            return View(student);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Enroll(int studentId, int courseId, int? grade)
+        {
+            if (!_context.Enrollments.Any(e => e.StudentId == studentId && e.CourseId == courseId))
+            {
+                var enrollment = new Enrollment
+                {
+                    StudentId = studentId,
+                    CourseId = courseId, 
+                    Grade =  grade ?? 0
+                };
+                _context.Enrollments.Add(enrollment);
+                _context.SaveChanges();
+
+            }
+
+            return RedirectToAction(nameof(Details), new { id = studentId });
+        }
+
+
     }
 }

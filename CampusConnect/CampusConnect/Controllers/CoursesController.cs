@@ -16,9 +16,18 @@ namespace CampusConnect.Controllers
         }
 
         // GET: Courses
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Courses.ToListAsync());
+
+            var courses = from c in _context.Courses
+                           select c;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                courses = courses.Where(c => c.Title.Contains(searchString));
+            }
+
+            return View(await courses.ToListAsync());
         }
 
         // GET: Courses/Details/5

@@ -12,6 +12,23 @@
     <p><strong>Program:</strong> @Model.Program</p>
     <p><strong>GPA:</strong> @Model.GPA</p>
 </div>
+<h3>Enrolled Courses:</h3>
+@if (Model.Enrollments != null && Model.Enrollments.Any())
+{
+    <ul>
+        @foreach (var enrollment in Model.Enrollments)
+        {
+            <li>@enrollment.Course.Title (@enrollment.Grade ?? "N/A")</li>
+        }
+    </ul>
+}
+else
+{
+    <p>This student is not enrolled in any courses.</p>
+}
+<p>
+    <a asp-action="Enroll" asp-route-id="@Model.StudentId" class="btn btn-success">Enroll in a Course</a>
+</p>
 
 <p>
     <a asp-action="Edit" asp-route-id="@Model.StudentId" class="btn btn-warning">Edit</a>

@@ -1,6 +1,42 @@
 ﻿@{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Welcome to CampusConnect";
 }
 
-<h1>Welcome to CampusConnect</h1>
-<p>Use the navigation menu to go to Students or Courses.</p>
+<div class="text-center my-5">
+    <h1 class="fw-bold text-primary mb-3">Welcome to CampusConnect 🎓</h1>
+    <p class="lead text-secondary mb-5">
+        Manage students, courses, and enrollments efficiently — all in one place.
+    </p>
+
+    <div class="row justify-content-center">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-bold">👩‍🎓 Students</h5>
+                    <p class="card-text text-muted">View, add, and manage student records.</p>
+                    <a class="btn btn-primary" asp-controller="Students" asp-action="Index">Go to Students</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-bold">📘 Courses</h5>
+                    <p class="card-text text-muted">Browse and organize university courses.</p>
+                    <a class="btn btn-primary" asp-controller="Courses" asp-action="Index">Go to Courses</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-bold">📝 Enrollments</h5>
+                    <p class="card-text text-muted">Track which students are enrolled in which courses.</p>
+                    <a class="btn btn-primary" asp-controller="Enrollments" asp-action="Index">View Enrollments</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
