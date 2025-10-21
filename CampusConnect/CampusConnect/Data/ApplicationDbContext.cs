@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using CampusConnect.Mode // Replace 'CampusConnect' with your actual project namespace
+using CampusConnect.Models; 
 
 namespace CampusConnect.Data
 {
@@ -10,7 +10,7 @@ namespace CampusConnect.Data
         {
         }
 
-        // 🧱 Example DbSets (we’ll add real ones later)
+        
         public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
     }

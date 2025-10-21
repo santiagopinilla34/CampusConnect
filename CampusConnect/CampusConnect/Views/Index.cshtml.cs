@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace CampusConnect.Pages
+namespace CampusConnect.Views
 {
     public class IndexModel : PageModel
     {

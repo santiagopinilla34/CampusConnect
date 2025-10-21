@@ -1,0 +1,21 @@
+﻿@model CampusConnect.Models.Student
+@{
+    ViewData["Title"] = "Delete Student";
+}
+
+<h1>Delete Student</h1>
+
+<h3>Are you sure you want to delete this student?</h3>
+
+<div>
+    <h4>@Model.FirstName @Model.LastName</h4>
+    <p>Email: @Model.Email</p>
+    <p>Program: @Model.Program</p>
+    <p>GPA: @Model.GPA</p>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="StudentId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

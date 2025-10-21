@@ -1,0 +1,38 @@
+﻿@model IEnumerable<CampusConnect.Models.Course>
+@{
+    ViewData["Title"] = "Courses";
+}
+
+<h1>Courses</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Add New Course</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Title</th>
+            <th>Instructor</th>
+            <th>Students Enrolled</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var course in Model)
+        {
+            <tr>
+                <td>@course.Code</td>
+                <td>@course.Title</td>
+                <td>@course.Instructor</td>
+                <td>@course.StudentsEnrolled</td>
+                <td>
+                    <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@course.CourseId">Details</a>
+                    <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@course.CourseId">Edit</a>
+                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@course.CourseId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
