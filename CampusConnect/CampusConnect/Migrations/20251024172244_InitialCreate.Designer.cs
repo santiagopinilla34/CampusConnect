@@ -4,6 +4,7 @@ using CampusConnect.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CampusConnect.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251024172244_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -199,148 +202,6 @@ namespace CampusConnect.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("Enrollments");
-
-                    b.HasData(
-                        new
-                        {
-                            EnrollmentId = 1,
-                            CourseId = 1,
-                            Grade = 90,
-                            StudentId = 1
-                        },
-                        new
-                        {
-                            EnrollmentId = 2,
-                            CourseId = 2,
-                            Grade = 85,
-                            StudentId = 1
-                        },
-                        new
-                        {
-                            EnrollmentId = 3,
-                            CourseId = 2,
-                            Grade = 88,
-                            StudentId = 2
-                        },
-                        new
-                        {
-                            EnrollmentId = 4,
-                            CourseId = 3,
-                            Grade = 92,
-                            StudentId = 2
-                        },
-                        new
-                        {
-                            EnrollmentId = 5,
-                            CourseId = 1,
-                            Grade = 95,
-                            StudentId = 3
-                        },
-                        new
-                        {
-                            EnrollmentId = 6,
-                            CourseId = 3,
-                            Grade = 89,
-                            StudentId = 3
-                        },
-                        new
-                        {
-                            EnrollmentId = 7,
-                            CourseId = 4,
-                            Grade = 80,
-                            StudentId = 4
-                        },
-                        new
-                        {
-                            EnrollmentId = 8,
-                            CourseId = 5,
-                            Grade = 84,
-                            StudentId = 4
-                        },
-                        new
-                        {
-                            EnrollmentId = 9,
-                            CourseId = 1,
-                            Grade = 91,
-                            StudentId = 5
-                        },
-                        new
-                        {
-                            EnrollmentId = 10,
-                            CourseId = 6,
-                            Grade = 87,
-                            StudentId = 5
-                        },
-                        new
-                        {
-                            EnrollmentId = 11,
-                            CourseId = 7,
-                            Grade = 82,
-                            StudentId = 6
-                        },
-                        new
-                        {
-                            EnrollmentId = 12,
-                            CourseId = 8,
-                            Grade = 79,
-                            StudentId = 6
-                        },
-                        new
-                        {
-                            EnrollmentId = 13,
-                            CourseId = 2,
-                            Grade = 94,
-                            StudentId = 7
-                        },
-                        new
-                        {
-                            EnrollmentId = 14,
-                            CourseId = 4,
-                            Grade = 88,
-                            StudentId = 7
-                        },
-                        new
-                        {
-                            EnrollmentId = 15,
-                            CourseId = 5,
-                            Grade = 85,
-                            StudentId = 8
-                        },
-                        new
-                        {
-                            EnrollmentId = 16,
-                            CourseId = 6,
-                            Grade = 90,
-                            StudentId = 8
-                        },
-                        new
-                        {
-                            EnrollmentId = 17,
-                            CourseId = 3,
-                            Grade = 87,
-                            StudentId = 9
-                        },
-                        new
-                        {
-                            EnrollmentId = 18,
-                            CourseId = 7,
-                            Grade = 82,
-                            StudentId = 9
-                        },
-                        new
-                        {
-                            EnrollmentId = 19,
-                            CourseId = 8,
-                            Grade = 86,
-                            StudentId = 10
-                        },
-                        new
-                        {
-                            EnrollmentId = 20,
-                            CourseId = 9,
-                            Grade = 90,
-                            StudentId = 10
-                        });
                 });
 
             modelBuilder.Entity("CampusConnect.Models.Student", b =>

@@ -19,8 +19,9 @@ namespace CampusConnect.Controllers
         public async Task<IActionResult> Index(string searchString)
         {
 
-            var courses = from c in _context.Courses
-                           select c;
+            var courses = _context.Courses
+            .Include(c => c.Enrollments)
+            .AsQueryable();
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -121,6 +122,16 @@ namespace CampusConnect.Controllers
         private bool CourseExists(int id)
         {
             return _context.Courses.Any(e => e.CourseId == id);
+        }
+
+        public async Task<IActionResult> Enrollment()
+        {
+            var courses = await _context.Courses
+                .Include(c => c.Enrollments)
+                    .ThenInclude(e => e.Student)
+                .ToListAsync();
+
+            return View(courses);
         }
     }
 }

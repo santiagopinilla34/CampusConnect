@@ -34,7 +34,7 @@
                 <td>@course.Code</td>
                 <td>@course.Title</td>
                 <td>@course.Instructor</td>
-                <td>@course.StudentsEnrolled</td>
+                <td>@(course.Enrollments?.Count() ?? 0)</td>
                 <td>
                     <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@course.CourseId">Details</a>
                     <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@course.CourseId">Edit</a>

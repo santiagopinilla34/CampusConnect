@@ -1,0 +1,37 @@
+﻿@model IEnumerable<CampusConnect.Models.Course>
+
+@{
+    ViewData["Title"] = "Course Enrollments";
+}
+
+<h2>Course Enrollments</h2>
+
+<div class="accordion" id="coursesAccordion">
+    @foreach (var course in Model)
+    {
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading@course.CourseId">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse@course.CourseId" aria-expanded="false" aria-controls="collapse@course.CourseId">
+                    @course.Code - @course.Title
+                </button>
+            </h2>
+            <div id="collapse@course.CourseId" class="accordion-collapse collapse" aria-labelledby="heading@course.CourseId" data-bs-parent="#coursesAccordion">
+                <div class="accordion-body">
+                    @if (course.Enrollments != null && course.Enrollments.Any())
+                    {
+                        <ul>
+                            @foreach (var enrollment in course.Enrollments)
+                            {
+                                <li>@enrollment.Student.FirstName @enrollment.Student.LastName (@enrollment.Grade)</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>No students enrolled in this course.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
