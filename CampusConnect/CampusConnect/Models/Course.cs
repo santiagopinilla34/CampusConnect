@@ -18,7 +18,7 @@ namespace CampusConnect.Models
         [StringLength(50)]
         public string Instructor { get; set; }
 
-        public int StudentsEnrolled { get; set; }
+        public int StudentsEnrolled { get; set; } = 0;
 
         public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
     }

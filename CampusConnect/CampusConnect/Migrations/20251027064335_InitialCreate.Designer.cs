@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CampusConnect.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251027063220_Seeds")]
-    partial class Seeds
+    [Migration("20251027064335_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -46,6 +46,22 @@ namespace CampusConnect.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IsTeacher = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Enrollments",
                 columns: table => new
                 {
@@ -108,7 +124,94 @@ namespace CampusConnect.Migrations
                     { 7, "sophia.davis@example.com", "Sophia", 3.8999999999999999, "Davis", "Computer Science" },
                     { 8, "noah.wilson@example.com", "Noah", 3.2000000000000002, "Wilson", "Data Science" },
                     { 9, "olivia.taylor@example.com", "Olivia", 3.6000000000000001, "Taylor", "Software Engineering" },
-                    { 10, "ethan.anderson@example.com", "Ethan", 3.2999999999999998, "Anderson", "Information Systems Security" }
+                    { 10, "ethan.anderson@example.com", "Ethan", 3.2999999999999998, "Anderson", "Information Systems Security" },
+                    { 11, "mia.thomas@example.com", "Mia", 3.5, "Thomas", "Computer Science" },
+                    { 12, "jacob.lee@example.com", "Jacob", 3.6000000000000001, "Lee", "Software Engineering" },
+                    { 13, "isabella.white@example.com", "Isabella", 3.7999999999999998, "White", "Data Science" },
+                    { 14, "william.harris@example.com", "William", 3.3999999999999999, "Harris", "Computer Science" },
+                    { 15, "emily.clark@example.com", "Emily", 3.7000000000000002, "Clark", "Software Engineering" },
+                    { 16, "james.lewis@example.com", "James", 3.2999999999999998, "Lewis", "Data Science" },
+                    { 17, "ava.robinson@example.com", "Ava", 3.8999999999999999, "Robinson", "Information Systems Security" },
+                    { 18, "michael.walker@example.com", "Michael", 3.2000000000000002, "Walker", "Computer Science" },
+                    { 19, "charlotte.hall@example.com", "Charlotte", 3.6000000000000001, "Hall", "Software Engineering" },
+                    { 20, "alexander.allen@example.com", "Alexander", 3.5, "Allen", "Data Science" },
+                    { 21, "ella.young@example.com", "Ella", 3.7000000000000002, "Young", "Computer Science" },
+                    { 22, "daniel.king@example.com", "Daniel", 3.3999999999999999, "King", "Software Engineering" },
+                    { 23, "amelia.wright@example.com", "Amelia", 3.8999999999999999, "Wright", "Data Science" },
+                    { 24, "matthew.scott@example.com", "Matthew", 3.2999999999999998, "Scott", "Information Systems Security" },
+                    { 25, "harper.green@example.com", "Harper", 3.6000000000000001, "Green", "Computer Science" },
+                    { 26, "joseph.adams@example.com", "Joseph", 3.5, "Adams", "Software Engineering" },
+                    { 27, "evelyn.baker@example.com", "Evelyn", 3.7999999999999998, "Baker", "Data Science" },
+                    { 28, "samuel.gonzalez@example.com", "Samuel", 3.3999999999999999, "Gonzalez", "Computer Science" },
+                    { 29, "elizabeth.nelson@example.com", "Elizabeth", 3.7000000000000002, "Nelson", "Software Engineering" },
+                    { 30, "david.carter@example.com", "David", 3.2999999999999998, "Carter", "Data Science" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Enrollments",
+                columns: new[] { "EnrollmentId", "CourseId", "Grade", "StudentId" },
+                values: new object[,]
+                {
+                    { 1, 1, 90, 1 },
+                    { 2, 2, 85, 1 },
+                    { 3, 2, 88, 2 },
+                    { 4, 3, 92, 2 },
+                    { 5, 1, 95, 3 },
+                    { 6, 3, 89, 3 },
+                    { 7, 4, 80, 4 },
+                    { 8, 5, 84, 4 },
+                    { 9, 1, 91, 5 },
+                    { 10, 6, 87, 5 },
+                    { 11, 7, 82, 6 },
+                    { 12, 8, 79, 6 },
+                    { 13, 2, 94, 7 },
+                    { 14, 4, 88, 7 },
+                    { 15, 5, 85, 8 },
+                    { 16, 6, 90, 8 },
+                    { 17, 3, 87, 9 },
+                    { 18, 7, 82, 9 },
+                    { 19, 8, 86, 10 },
+                    { 20, 9, 90, 10 },
+                    { 21, 1, 88, 11 },
+                    { 22, 2, 91, 11 },
+                    { 23, 3, 85, 12 },
+                    { 24, 4, 87, 12 },
+                    { 25, 5, 90, 13 },
+                    { 26, 6, 92, 13 },
+                    { 27, 7, 83, 14 },
+                    { 28, 8, 81, 14 },
+                    { 29, 9, 88, 15 },
+                    { 30, 10, 84, 15 },
+                    { 31, 11, 86, 16 },
+                    { 32, 12, 82, 16 },
+                    { 33, 13, 91, 17 },
+                    { 34, 14, 89, 17 },
+                    { 35, 15, 87, 18 },
+                    { 36, 1, 85, 18 },
+                    { 37, 2, 90, 19 },
+                    { 38, 3, 88, 19 },
+                    { 39, 4, 92, 20 },
+                    { 40, 5, 89, 20 },
+                    { 41, 6, 84, 21 },
+                    { 42, 7, 86, 21 },
+                    { 43, 8, 83, 22 },
+                    { 44, 9, 81, 22 },
+                    { 45, 10, 88, 23 },
+                    { 46, 11, 90, 23 },
+                    { 47, 12, 85, 24 },
+                    { 48, 13, 87, 24 },
+                    { 49, 14, 91, 25 },
+                    { 50, 15, 89, 25 },
+                    { 51, 1, 83, 26 },
+                    { 52, 2, 85, 26 },
+                    { 53, 3, 88, 27 },
+                    { 54, 4, 90, 27 },
+                    { 55, 5, 84, 28 },
+                    { 56, 6, 82, 28 },
+                    { 57, 7, 87, 29 },
+                    { 58, 8, 85, 29 },
+                    { 59, 9, 89, 30 },
+                    { 60, 10, 90, 30 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -127,6 +230,9 @@ namespace CampusConnect.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Enrollments");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Courses");

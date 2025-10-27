@@ -39,6 +39,9 @@ namespace CampusConnect.Controllers
             var course = await _context.Courses.FirstOrDefaultAsync(c => c.CourseId == id);
             if (course == null) return NotFound();
 
+            var enrolledCount = _context.Enrollments.Count(e => e.CourseId == course.CourseId);
+            course.StudentsEnrolled = enrolledCount;
+
             return View(course);
         }
 
@@ -65,6 +68,7 @@ namespace CampusConnect.Controllers
             }
             if (ModelState.IsValid)
             {
+                course.StudentsEnrolled = 0;
                 _context.Add(course);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -78,7 +82,7 @@ namespace CampusConnect.Controllers
             var role = HttpContext.Session.GetString("UserRole");
             if (role != "Teacher")
             {
-                return Forbid();
+                return RedirectToAction("AccessDenied", "Account");
             }
             if (id == null) return NotFound();
 
@@ -96,7 +100,7 @@ namespace CampusConnect.Controllers
             var role = HttpContext.Session.GetString("UserRole");
             if (role != "Teacher")
             {
-                return Forbid();
+                return RedirectToAction("AccessDenied", "Account");
             }
             if (id != course.CourseId) return NotFound();
 
@@ -123,7 +127,7 @@ namespace CampusConnect.Controllers
             var role = HttpContext.Session.GetString("UserRole");
             if (role != "Teacher")
             {
-                return Forbid();
+                return RedirectToAction("AccessDenied", "Account");
             }
             if (id == null) return NotFound();
 
@@ -141,7 +145,7 @@ namespace CampusConnect.Controllers
             var role = HttpContext.Session.GetString("UserRole");
             if (role != "Teacher")
             {
-                return Forbid();
+                return RedirectToAction("AccessDenied", "Account");
             }
             var course = await _context.Courses.FindAsync(id);
             _context.Courses.Remove(course);
