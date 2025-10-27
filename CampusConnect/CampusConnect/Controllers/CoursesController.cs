@@ -45,6 +45,11 @@ namespace CampusConnect.Controllers
         // GET: Courses/Create
         public IActionResult Create()
         {
+            var role = HttpContext.Session.GetString("UserRole");
+            if (role != "Teacher")
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
             return View();
         }
 
@@ -53,6 +58,11 @@ namespace CampusConnect.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Course course)
         {
+            var role = HttpContext.Session.GetString("UserRole");
+            if (role != "Teacher")
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(course);
@@ -65,6 +75,11 @@ namespace CampusConnect.Controllers
         // GET: Courses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var role = HttpContext.Session.GetString("UserRole");
+            if (role != "Teacher")
+            {
+                return Forbid();
+            }
             if (id == null) return NotFound();
 
             var course = await _context.Courses.FindAsync(id);
@@ -78,6 +93,11 @@ namespace CampusConnect.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Course course)
         {
+            var role = HttpContext.Session.GetString("UserRole");
+            if (role != "Teacher")
+            {
+                return Forbid();
+            }
             if (id != course.CourseId) return NotFound();
 
             if (ModelState.IsValid)
@@ -100,6 +120,11 @@ namespace CampusConnect.Controllers
         // GET: Courses/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var role = HttpContext.Session.GetString("UserRole");
+            if (role != "Teacher")
+            {
+                return Forbid();
+            }
             if (id == null) return NotFound();
 
             var course = await _context.Courses.FirstOrDefaultAsync(c => c.CourseId == id);
@@ -113,6 +138,11 @@ namespace CampusConnect.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var role = HttpContext.Session.GetString("UserRole");
+            if (role != "Teacher")
+            {
+                return Forbid();
+            }
             var course = await _context.Courses.FindAsync(id);
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();

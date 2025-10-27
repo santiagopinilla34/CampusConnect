@@ -24,15 +24,14 @@ namespace CampusConnect.Controllers
             var students = from s in _context.Students
                            select s;
 
-            if (!string.IsNullOrEmpty(searchString))
+            if (!String.IsNullOrEmpty(searchString))
             {
                 students = students.Where(s => s.FirstName.Contains(searchString)
-                                            || s.LastName.Contains(searchString));
+                                            || s.LastName.Contains(searchString)
+                                            || s.Email.Contains(searchString));
             }
 
             return View(await students.ToListAsync());
-
-
         }
 
         // GET: Students/Details/5
@@ -49,6 +48,11 @@ namespace CampusConnect.Controllers
         // GET: Students/Create
         public IActionResult Create()
         {
+            var role = HttpContext.Session.GetString("UserRole");
+            if (role != "Teacher")
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
             return View();
         }
 
@@ -57,6 +61,11 @@ namespace CampusConnect.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Student student)
         {
+            var role = HttpContext.Session.GetString("UserRole");
+            if (role != "Teacher")
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(student);
@@ -69,6 +78,11 @@ namespace CampusConnect.Controllers
         // GET: Students/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var role = HttpContext.Session.GetString("UserRole");
+            if (role != "Teacher")
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
             if (id == null) return NotFound();
 
             var student = await _context.Students.FindAsync(id);
@@ -82,6 +96,11 @@ namespace CampusConnect.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Student student)
         {
+            var role = HttpContext.Session.GetString("UserRole");
+            if (role != "Teacher")
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
             if (id != student.StudentId) return NotFound();
 
             if (ModelState.IsValid)
@@ -104,6 +123,11 @@ namespace CampusConnect.Controllers
         // GET: Students/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var role = HttpContext.Session.GetString("UserRole");
+            if (role != "Teacher")
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
             if (id == null) return NotFound();
 
             var student = await _context.Students.FirstOrDefaultAsync(s => s.StudentId == id);
@@ -117,6 +141,11 @@ namespace CampusConnect.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var role = HttpContext.Session.GetString("UserRole");
+            if (role != "Teacher")
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
             var student = await _context.Students.FindAsync(id);
             _context.Students.Remove(student);
             await _context.SaveChangesAsync();
@@ -131,6 +160,11 @@ namespace CampusConnect.Controllers
 
         public IActionResult Enroll(int id)
         {
+            var role = HttpContext.Session.GetString("UserRole");
+            if (role != "Teacher")
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
             var student = _context.Students.Find(id);
             if (student == null) return NotFound();
 
@@ -143,6 +177,11 @@ namespace CampusConnect.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Enroll(int studentId, int courseId, int? grade)
         {
+            var role = HttpContext.Session.GetString("UserRole");
+            if (role != "Teacher")
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
             if (!_context.Enrollments.Any(e => e.StudentId == studentId && e.CourseId == courseId))
             {
                 var enrollment = new Enrollment
