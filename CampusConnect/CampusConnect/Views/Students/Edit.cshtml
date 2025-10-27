@@ -3,45 +3,550 @@
     ViewData["Title"] = "Edit Student";
 }
 
-<h1>Edit Student</h1>
+<style>
+    .edit-container {
+        max-width: 800px;
+        margin: 0 auto;
+        animation: fadeInUp 0.6s ease;
+    }
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="StudentId" />
+    
 
-    <div class="form-group">
-        <label asp-for="FirstName"></label>
-        <input asp-for="FirstName" class="form-control" />
-        <span asp-validation-for="FirstName" class="text-danger"></span>
+    .page-header {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        animation: slideInRight 0.6s ease;
+        text-align: center;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #4f46e5, #06b6d4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .page-title i {
+        font-size: 2.5rem;
+        background: linear-gradient(135deg, #4f46e5, #06b6d4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .page-subtitle {
+        color: #64748b;
+        font-size: 1.1rem;
+        margin-top: 0.75rem;
+        font-weight: 500;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(79, 70, 229, 0.1);
+        animation: fadeInUp 0.6s ease 0.2s backwards;
+    }
+
+    .student-preview {
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.05), rgba(124, 58, 237, 0.05));
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border: 2px solid rgba(79, 70, 229, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .preview-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 2rem;
+        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+        flex-shrink: 0;
+    }
+
+    .preview-info h3 {
+        margin: 0 0 0.5rem 0;
+        color: #1e293b;
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+
+    .preview-info p {
+        margin: 0;
+        color: #64748b;
+        font-size: 1rem;
+    }
+
+    .form-section {
+        margin-bottom: 2rem;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .section-header i {
+        color: #4f46e5;
+        font-size: 1.5rem;
+    }
+
+    .section-header h3 {
+        margin: 0;
+        color: #1e293b;
+        font-weight: 700;
+        font-size: 1.25rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+        animation: fadeInUp 0.6s ease backwards;
+    }
+
+    .form-group:nth-child(1) { animation-delay: 0.3s; }
+    .form-group:nth-child(2) { animation-delay: 0.35s; }
+    .form-group:nth-child(3) { animation-delay: 0.4s; }
+    .form-group:nth-child(4) { animation-delay: 0.45s; }
+    .form-group:nth-child(5) { animation-delay: 0.5s; }
+
+    .form-group label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+    }
+
+    .form-group label i {
+        color: #4f46e5;
+        font-size: 1.1rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        border: 2px solid rgba(79, 70, 229, 0.2);
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f8fafc;
+        font-family: inherit;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        background: white;
+        transform: translateY(-2px);
+    }
+
+    .form-control:hover {
+        border-color: rgba(79, 70, 229, 0.3);
+    }
+
+    .text-danger {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #ef4444;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        font-weight: 500;
+    }
+
+    .text-danger::before {
+        content: '\f071';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2.5rem;
+        padding-top: 2rem;
+        border-top: 2px solid #e2e8f0;
+    }
+
+    .action-btn {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 1.25rem 2rem;
+        border-radius: 16px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 2px solid;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .action-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .action-btn:hover::before {
+        left: 100%;
+    }
+
+    .action-btn i {
+        font-size: 1.1rem;
+    }
+
+    .btn-save {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        color: white;
+        border-color: #4f46e5;
+        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+    }
+
+    .btn-save:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(79, 70, 229, 0.4);
+        color: white;
+    }
+
+    .btn-cancel {
+        background: white;
+        color: #64748b;
+        border-color: #e2e8f0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-cancel:hover {
+        background: #f8fafc;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        color: #64748b;
+    }
+
+    .input-icon {
+        position: relative;
+    }
+
+    .input-icon i {
+        position: absolute;
+        left: 1.25rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748b;
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
+
+    .input-icon .form-control {
+        padding-left: 3.5rem;
+    }
+
+    .input-icon .form-control:focus ~ i {
+        color: #4f46e5;
+    }
+
+    .gpa-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+        color: #64748b;
+        font-size: 0.875rem;
+    }
+
+    .gpa-info i {
+        color: #4f46e5;
+    }
+
+    .char-count {
+        text-align: right;
+        font-size: 0.875rem;
+        color: #94a3b8;
+        margin-top: 0.5rem;
+    }
+
+    
+
+    /* Loading state */
+    .btn-save.loading {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+
+    .btn-save.loading::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        right: 1rem;
+    }
+
+    
+</style>
+
+<div class="edit-container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-user-edit"></i>
+            Edit Student
+        </h1>
+        <p class="page-subtitle">Update student information and academic details</p>
     </div>
 
-    <div class="form-group">
-        <label asp-for="LastName"></label>
-        <input asp-for="LastName" class="form-control" />
-        <span asp-validation-for="LastName" class="text-danger"></span>
+    <div class="form-card">
+        <div class="student-preview">
+            <div class="preview-avatar" id="previewAvatar">
+                @(Model.FirstName?.Substring(0, 1).ToUpper())@(Model.LastName?.Substring(0, 1).ToUpper())
+            </div>
+            <div class="preview-info">
+                <h3 id="previewName">@Model.FirstName @Model.LastName</h3>
+                <p id="previewEmail">@Model.Email</p>
+            </div>
+        </div>
+
+        <form asp-action="Edit" method="post" id="editForm">
+            <input type="hidden" asp-for="StudentId" />
+
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-user"></i>
+                    <h3>Personal Information</h3>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FirstName">
+                        <i class="fas fa-user"></i>
+                        First Name
+                    </label>
+                    <div class="input-icon">
+                        <input asp-for="FirstName" class="form-control" id="firstNameInput" placeholder="Enter first name" />
+                        <i class="fas fa-user"></i>
+                    </div>
+                    
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="LastName">
+                        <i class="fas fa-user"></i>
+                        Last Name
+                    </label>
+                    <div class="input-icon">
+                        <input asp-for="LastName" class="form-control" id="lastNameInput" placeholder="Enter last name" />
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email">
+                        <i class="fas fa-envelope"></i>
+                        Email Address
+                    </label>
+                    <div class="input-icon">
+                        <input asp-for="Email" class="form-control" id="emailInput" placeholder="student@example.com" />
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Academic Information</h3>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Program">
+                        <i class="fas fa-book"></i>
+                        Program
+                    </label>
+                    <div class="input-icon">
+                        <input asp-for="Program" class="form-control" placeholder="e.g., Computer Science" maxlength="100" id="programInput" />
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <span asp-validation-for="Program" class="text-danger"></span>
+                    <div class="char-count" id="programCount">0 / 100</div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="GPA">
+                        <i class="fas fa-chart-line"></i>
+                        GPA
+                    </label>
+                    <div class="input-icon">
+                        <input asp-for="GPA" class="form-control" placeholder="0.00 - 4.00" step="0.01" min="0" max="4" />
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span asp-validation-for="GPA" class="text-danger"></span>
+                    <div class="gpa-info">
+                        <i class="fas fa-info-circle"></i>
+                        Enter GPA on a 4.0 scale
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="action-btn btn-save" id="saveBtn">
+                    <i class="fas fa-save"></i>
+                    Save Changes
+                </button>
+                <a asp-action="Index" class="action-btn btn-cancel">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </a>
+            </div>
+        </form>
     </div>
+</div>
 
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
 
-    <div class="form-group">
-        <label asp-for="Program"></label>
-        <input asp-for="Program" class="form-control" />
-        <span asp-validation-for="Program" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="GPA"></label>
-        <input asp-for="GPA" class="form-control" />
-        <span asp-validation-for="GPA" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
-
-@section Scripts {
     <partial name="_ValidationScriptsPartial" />
-}
+    <script>
+        // Real-time preview update
+        const firstNameInput = document.getElementById('firstNameInput');
+        const lastNameInput = document.getElementById('lastNameInput');
+        const emailInput = document.getElementById('emailInput');
+        const previewName = document.getElementById('previewName');
+        const previewEmail = document.getElementById('previewEmail');
+        const previewAvatar = document.getElementById('previewAvatar');
+
+        function updatePreview() {
+            const firstName = firstNameInput.value.trim() || 'First';
+            const lastName = lastNameInput.value.trim() || 'Last';
+            const email = emailInput.value.trim() || 'email@example.com';
+
+            previewName.textContent = `${firstName} ${lastName}`;
+            previewEmail.textContent = email;
+            
+            const firstInitial = firstName.charAt(0).toUpperCase();
+            const lastInitial = lastName.charAt(0).toUpperCase();
+            previewAvatar.textContent = `${firstInitial}${lastInitial}`;
+        }
+
+        firstNameInput.addEventListener('input', updatePreview);
+        lastNameInput.addEventListener('input', updatePreview);
+        emailInput.addEventListener('input', updatePreview);
+
+        // Character counter
+        const programInput = document.getElementById('programInput');
+        const programCount = document.getElementById('programCount');
+
+        if (programInput && programCount) {
+            programInput.addEventListener('input', function() {
+                const count = this.value.length;
+                programCount.textContent = `${count} / 100`;
+                
+                if (count > 80) {
+                    programCount.style.color = '#ef4444';
+                } else if (count > 50) {
+                    programCount.style.color = '#f59e0b';
+                } else {
+                    programCount.style.color = '#94a3b8';
+                }
+            });
+            
+            // Initialize counter
+            programCount.textContent = `${programInput.value.length} / 100`;
+        }
+
+        // Form submission animation
+        const form = document.getElementById('editForm');
+        const saveBtn = document.getElementById('saveBtn');
+
+        form.addEventListener('submit', function(e) {
+            if (form.checkValidity()) {
+                saveBtn.classList.add('loading');
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            }
+        });
+
+        // Add ripple effect to buttons
+        document.querySelectorAll('.action-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (this.classList.contains('btn-cancel')) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.style.position = 'absolute';
+                    ripple.style.borderRadius = '50%';
+                    ripple.style.background = 'rgba(0, 0, 0, 0.1)';
+                    ripple.style.transform = 'scale(0)';
+                    ripple.style.animation = 'ripple 0.6s ease-out';
+                    ripple.style.pointerEvents = 'none';
+
+                    this.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 600);
+                }
+            });
+        });
+
+        // Add keyframe for ripple animation
+        const style = document.createElement('style');
+        
+        document.head.appendChild(style);
+
+        // Input validation feedback
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    this.style.borderColor = '#ef4444';
+                } else {
+                    this.style.borderColor = '#10b981';
+                }
+            });
+
+            input.addEventListener('focus', function() {
+                this.style.borderColor = '#4f46e5';
+            });
+        });
+    </script>

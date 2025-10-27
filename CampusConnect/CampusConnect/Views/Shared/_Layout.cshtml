@@ -5,26 +5,424 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CampusConnect</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --primary-light: #818cf8;
+            --secondary: #06b6d4;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --bg-light: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+            /* Glassmorphism overlay */
+            body::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(100px);
+                z-index: -1;
+            }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+            .navbar.scrolled {
+                box-shadow: var(--shadow-lg);
+                background: rgba(255, 255, 255, 0.98) !important;
+            }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+            .navbar-brand:hover {
+                transform: scale(1.05);
+            }
+
+            .navbar-brand i {
+                font-size: 1.75rem;
+                background: linear-gradient(135deg, var(--primary), var(--secondary));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: float 3s ease-in-out infinite;
+            }
+
+      
+
+        .navbar-nav {
+            gap: 0.5rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary) !important;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem !important;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .nav-link::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                z-index: -1;
+                border-radius: 12px;
+            }
+
+            .nav-link:hover {
+                color: white !important;
+                transform: translateY(-2px);
+            }
+
+                .nav-link:hover::before {
+                    opacity: 1;
+                }
+
+            .nav-link.active {
+                color: white !important;
+                background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+                box-shadow: var(--shadow-md);
+            }
+
+        /* Main container */
+        main {
+            flex: 1;
+            padding: 3rem 0;
+            animation: fadeIn 0.5s ease;
+        }
+
+        
+
+        /* Card enhancements */
+        .card {
+            border: none;
+            border-radius: 20px;
+            background: var(--bg-card);
+            box-shadow: var(--shadow-lg);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            position: relative;
+        }
+
+            .card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+                transform: scaleX(0);
+                transition: transform 0.4s ease;
+            }
+
+            .card:hover {
+                transform: translateY(-8px);
+                box-shadow: var(--shadow-xl);
+            }
+
+                .card:hover::before {
+                    transform: scaleX(1);
+                }
+
+        /* Button enhancements */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            padding: 0.75rem 1.75rem;
+            border-radius: 12px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn-primary::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.3);
+                transform: translate(-50%, -50%);
+                transition: width 0.6s, height 0.6s;
+            }
+
+            .btn-primary:hover::before {
+                width: 300px;
+                height: 300px;
+            }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-lg);
+            }
+
+        /* Headings */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 2rem 0;
+            color: var(--text-secondary);
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+            footer p {
+                margin: 0;
+                font-size: 0.9rem;
+            }
+
+        /* Table enhancements */
+        .table {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+            .table thead {
+                background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+                color: white;
+            }
+
+                .table thead th {
+                    border: none;
+                    padding: 1rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    font-size: 0.85rem;
+                    letter-spacing: 0.5px;
+                }
+
+            .table tbody tr {
+                transition: all 0.3s ease;
+            }
+
+                .table tbody tr:hover {
+                    background: rgba(79, 70, 229, 0.05);
+                    transform: scale(1.01);
+                }
+
+            .table tbody td {
+                padding: 1rem;
+                vertical-align: middle;
+                border-color: rgba(0, 0, 0, 0.05);
+            }
+
+        /* Form enhancements */
+        .form-control, .form-select {
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+            background: var(--bg-card);
+        }
+
+            .form-control:focus, .form-select:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+                transform: translateY(-2px);
+            }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Badge enhancements */
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        /* Alert enhancements */
+        .alert {
+            border: none;
+            border-radius: 16px;
+            padding: 1.25rem;
+            box-shadow: var(--shadow-md);
+            animation: slideDown 0.4s ease;
+        }
+
+        
+
+        /* Loading spinner */
+        .spinner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+            .spinner-overlay.active {
+                opacity: 1;
+                pointer-events: all;
+            }
+
+        /* Responsive */
+        
+
+        {
+            font-size: 2rem;
+        }
+
+        .navbar-brand {
+            font-size: 1.25rem;
+        }
+
+        .card {
+            margin-bottom: 1.5rem;
+        }
+
+        main {
+            padding: 2rem 0;
+        }
+
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: linear-gradient(180deg, var(--primary-dark), var(--primary));
+                background-clip: padding-box;
+            }
+    </style>
 </head>
-<body class="bg-light">
+<body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container-fluid">
-                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">CampusConnect</a>
+                <a class="navbar-brand" href="/">
+                    <i class="fas fa-graduation-cap"></i>
+                    CampusConnect
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
+                       
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Students" asp-action="Index">Students</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-chart-line me-2"></i>Dashboard
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Courses" asp-action="Index">Courses</a>
+                            <a class="nav-link" asp-controller="Students" asp-action="Index">
+                                <i class="fas fa-user-graduate me-2"></i>Students
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Courses" asp-action="Enrollment">Course Enrollments</a>
+                            <a class="nav-link" asp-controller="Courses" asp-action="Index">
+                                <i class="fas fa-book me-2"></i>Courses
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Courses" asp-action="Enrollment">
+                                <i class="fas fa-clipboard-list me-2"></i>Enrollments
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -32,14 +430,65 @@
         </nav>
     </header>
 
-    <main role="main" class="container py-4">
+    <main role="main" class="container py-5">
         @RenderBody()
     </main>
 
-    <footer class="text-center text-muted py-3 border-top">
-        <p>&copy; @DateTime.Now.Year - CampusConnect University System</p>
+    <footer class="text-center">
+        <div class="container">
+            <p>
+                <i class="fas fa-copyright me-2"></i>
+                @DateTime.Now.Year CampusConnect University System - Empowering Education
+            </p>
+        </div>
     </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add ripple effect to buttons
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+
+                this.appendChild(ripple);
+
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -2,41 +2,452 @@
     ViewData["Title"] = "Welcome to CampusConnect";
 }
 
-<div class="text-center my-5">
-    <h1 class="fw-bold text-primary mb-3">Welcome to CampusConnect 🎓</h1>
-    <p class="lead text-secondary mb-5">
-        Manage students, courses, and enrollments efficiently — all in one place.
-    </p>
+<style>
+    .hero-section {
+        position: relative;
+        padding: 4rem 0 3rem;
+        overflow: hidden;
+    }
 
-    <div class="row justify-content-center">
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center">
-                    <h5 class="card-title fw-bold">👩‍🎓 Students</h5>
-                    <p class="card-text text-muted">View, add, and manage student records.</p>
-                    <a class="btn btn-primary" asp-controller="Students" asp-action="Index">Go to Students</a>
-                </div>
-            </div>
-        </div>
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
 
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center">
-                    <h5 class="card-title fw-bold">📘 Courses</h5>
-                    <p class="card-text text-muted">Browse and organize university courses.</p>
-                    <a class="btn btn-primary" asp-controller="Courses" asp-action="Index">Go to Courses</a>
-                </div>
-            </div>
-        </div>
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        background: white;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1.5rem;
+        letter-spacing: -1px;
+        animation: fadeInUp 0.8s ease;
+    }
 
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center">
-                    <h5 class="card-title fw-bold">📝 Enrollments</h5>
-                    <p class="card-text text-muted">Track which students are enrolled in which courses.</p>
-                    <a class="btn btn-primary" asp-controller="Courses" asp-action="Enrollment/">View Enrollments</a>
-                </div>
-            </div>
-        </div>
+    .hero-subtitle {
+        font-size: 1.4rem;
+        color: white;
+        font-weight: 500;
+        max-width: 700px;
+        margin: 0 auto 3rem;
+        line-height: 1.7;
+        animation: fadeInUp 1s ease;
+       
+        animation-fill-mode: forwards;
+    }
+
+    .floating-shapes {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .shape {
+        position: absolute;
+        opacity: 0.1;
+        animation: float 20s infinite ease-in-out;
+    }
+
+    .shape-1 {
+        top: 10%;
+        left: 10%;
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, #4f46e5, #06b6d4);
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        animation-delay: 0s;
+    }
+
+    .shape-2 {
+        top: 60%;
+        right: 15%;
+        width: 150px;
+        height: 150px;
+        background: linear-gradient(135deg, #f59e0b, #ef4444);
+        border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+        animation-delay: -5s;
+    }
+
+    .shape-3 {
+        bottom: 20%;
+        left: 20%;
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #10b981, #06b6d4);
+        border-radius: 50%;
+        animation-delay: -10s;
+    }
+
+    
+
+    .dashboard-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    .feature-card {
+        background: white;
+        border-radius: 24px;
+        padding: 2.5rem 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(79, 70, 229, 0.1);
+        animation: fadeInUp 0.8s ease;
+        animation-fill-mode: backwards;
+    }
+
+        .feature-card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .feature-card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .feature-card:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--card-color-1), var(--card-color-2));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+            transform-origin: left;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:nth-child(1) {
+            --card-color-1: #4f46e5;
+            --card-color-2: #7c3aed;
+        }
+
+        .feature-card:nth-child(2) {
+            --card-color-1: #06b6d4;
+            --card-color-2: #0891b2;
+        }
+
+        .feature-card:nth-child(3) {
+            --card-color-1: #f59e0b;
+            --card-color-2: #ef4444;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+    .card-icon-wrapper {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 1.5rem;
+        background: linear-gradient(135deg, var(--card-color-1), var(--card-color-2));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+        transition: all 0.4s ease;
+        position: relative;
+    }
+
+    .feature-card:hover .card-icon-wrapper {
+        transform: rotateY(180deg) scale(1.1);
+        box-shadow: 0 12px 30px rgba(79, 70, 229, 0.4);
+    }
+
+    .card-icon-wrapper::after {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        background: linear-gradient(135deg, var(--card-color-1), var(--card-color-2));
+        border-radius: 20px;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: -1;
+        filter: blur(10px);
+    }
+
+    .feature-card:hover .card-icon-wrapper::after {
+        opacity: 0.6;
+    }
+
+    .card-title-custom {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 1rem;
+        letter-spacing: -0.3px;
+    }
+
+    .card-description {
+        color: #64748b;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        min-height: 48px;
+    }
+
+    .card-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.875rem 1.75rem;
+        background: linear-gradient(135deg, var(--card-color-1), var(--card-color-2));
+        color: white;
+        text-decoration: none;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .card-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .card-btn:hover::before {
+            left: 100%;
+        }
+
+        .card-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+            color: white;
+        }
+
+        .card-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .card-btn:hover i {
+            transform: translateX(4px);
+        }
+
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        max-width: 1200px;
+        margin: 4rem auto 2rem;
+        padding: 0 1rem;
+    }
+
+    .stat-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        padding: 1.5rem;
+        border-radius: 16px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #4f46e5, #06b6d4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: #64748b;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+
+    .feature-card:hover .card-icon-wrapper {
+        animation: pulse 1s ease infinite;
+    }
+</style>
+
+<div class="hero-section">
+    <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <div class="hero-content text-center">
+        <h1 class="hero-title">
+            Welcome to CampusConnect
+        </h1>
+        <p class="hero-subtitle text-white">
+            Streamline your academic management with our powerful, intuitive platform.
+            Manage students, courses, and enrollments — all in one beautifully designed space.
+        </p>
     </div>
 </div>
+
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="stat-number">1,234</div>
+        <div class="stat-label">Active Students</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">48</div>
+        <div class="stat-label">Total Courses</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">3,567</div>
+        <div class="stat-label">Enrollments</div>
+    </div>
+</div>
+
+<div class="dashboard-cards">
+    <div class="feature-card">
+        <div class="card-icon-wrapper">
+            <i class="fas fa-user-graduate"></i>
+        </div>
+        <h5 class="card-title-custom">Students</h5>
+        <p class="card-description">
+            View, add, edit, and manage comprehensive student records with ease.
+        </p>
+        <a class="card-btn" asp-controller="Students" asp-action="Index">
+            Manage Students
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+
+    <div class="feature-card">
+        <div class="card-icon-wrapper">
+            <i class="fas fa-book-open"></i>
+        </div>
+        <h5 class="card-title-custom">Courses</h5>
+        <p class="card-description">
+            Browse, organize, and oversee all university courses in one central hub.
+        </p>
+        <a class="card-btn" asp-controller="Courses" asp-action="Index">
+            View Courses
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+
+    <div class="feature-card">
+        <div class="card-icon-wrapper">
+            <i class="fas fa-clipboard-check"></i>
+        </div>
+        <h5 class="card-title-custom">Enrollments</h5>
+        <p class="card-description">
+            Track and manage student enrollment status across all courses effortlessly.
+        </p>
+        <a class="card-btn" asp-controller="Courses" asp-action="Enrollment">
+            View Enrollments
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+</div>
+
+<script>
+    // Add scroll reveal animation
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.feature-card, .stat-card').forEach(card => {
+        observer.observe(card);
+    });
+
+    // Add parallax effect to floating shapes
+    document.addEventListener('mousemove', (e) => {
+        const shapes = document.querySelectorAll('.shape');
+        const mouseX = e.clientX / window.innerWidth;
+        const mouseY = e.clientY / window.innerHeight;
+
+        shapes.forEach((shape, index) => {
+            const speed = (index + 1) * 20;
+            const x = (mouseX - 0.5) * speed;
+            const y = (mouseY - 0.5) * speed;
+            shape.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    });
+
+    // Animate stats on scroll
+    const animateStats = () => {
+        const statNumbers = document.querySelectorAll('.stat-number');
+
+        statNumbers.forEach(stat => {
+            const target = parseInt(stat.textContent.replace(/,/g, ''));
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    stat.textContent = target.toLocaleString();
+                    clearInterval(timer);
+                } else {
+                    stat.textContent = Math.floor(current).toLocaleString();
+                }
+            }, 30);
+        });
+    };
+
+    // Trigger animation when stats come into view
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                entry.target.classList.add('animated');
+                animateStats();
+            }
+        });
+    }, { threshold: 0.5 });
+
+    const statsRow = document.querySelector('.stats-row');
+    if (statsRow) {
+        statsObserver.observe(statsRow);
+    }
+</script>

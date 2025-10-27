@@ -1,16 +1,627 @@
 ﻿@model CampusConnect.Models.Student
 @using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Enroll Student";
+}
 
-<h1>Enroll @Model.FirstName @Model.LastName</h1>
+<style>
+    .enroll-container {
+        max-width: 900px;
+        margin: 0 auto;
+        animation: fadeInUp 0.6s ease;
+    }
 
-<form asp-action="Enroll" method="post">
-    <input type="hidden" name="studentId" value="@Model.StudentId" />
+    
 
-    <div class="form-group">
-        <label>Select Course</label>
-        <select name="courseId" class="form-control" asp-items="ViewBag.Courses"></select>
+    .page-header {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        animation: slideInRight 0.6s ease;
+        text-align: center;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #4f46e5, #06b6d4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+        .page-title i {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+    .page-subtitle {
+        color: #64748b;
+        font-size: 1.1rem;
+        margin-top: 0.75rem;
+        font-weight: 500;
+    }
+
+    .student-card {
+        background: white;
+        border-radius: 24px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(79, 70, 229, 0.1);
+        animation: fadeInUp 0.6s ease 0.2s backwards;
+    }
+
+    .student-info {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.05), rgba(124, 58, 237, 0.05));
+        border-radius: 16px;
+        border: 2px solid rgba(79, 70, 229, 0.1);
+    }
+
+    .student-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 2rem;
+        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+        flex-shrink: 0;
+    }
+
+    .student-details h2 {
+        margin: 0 0 0.5rem 0;
+        color: #1e293b;
+        font-weight: 700;
+        font-size: 1.75rem;
+    }
+
+    .student-meta {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #64748b;
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+
+        .meta-item i {
+            color: #4f46e5;
+        }
+
+    .form-card {
+        background: white;
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(79, 70, 229, 0.1);
+        animation: fadeInUp 0.6s ease 0.4s backwards;
+    }
+
+    .form-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+        .form-header i {
+            color: #4f46e5;
+            font-size: 1.75rem;
+        }
+
+        .form-header h3 {
+            margin: 0;
+            color: #1e293b;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+    .form-group {
+        margin-bottom: 2rem;
+    }
+
+        .form-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+            .form-group label i {
+                color: #4f46e5;
+                font-size: 1.2rem;
+            }
+
+    .course-select-wrapper {
+        position: relative;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 1.25rem 3.5rem 1.25rem 3.5rem;
+        border: 2px solid rgba(79, 70, 229, 0.2);
+        border-radius: 12px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        background: #f8fafc;
+        font-family: inherit;
+        appearance: none;
+        cursor: pointer;
+        font-weight: 500;
+        color: #1e293b;
+    }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .form-control:hover {
+            border-color: rgba(79, 70, 229, 0.3);
+        }
+
+    .select-icon {
+        position: absolute;
+        left: 1.25rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748b;
+        font-size: 1.25rem;
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
+
+    .select-arrow {
+        position: absolute;
+        right: 1.25rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748b;
+        font-size: 1.25rem;
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus ~ .select-icon,
+    .form-control:focus ~ .select-arrow {
+        color: #4f46e5;
+    }
+
+    .course-info {
+        margin-top: 1rem;
+        padding: 1rem 1.5rem;
+        background: linear-gradient(135deg, rgba(6, 182, 212, 0.05), rgba(79, 70, 229, 0.05));
+        border-radius: 12px;
+        border: 2px solid rgba(6, 182, 212, 0.2);
+        display: none;
+    }
+
+        .course-info.visible {
+            display: block;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        .course-info p {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .course-info i {
+            color: #06b6d4;
+        }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2.5rem;
+        padding-top: 2rem;
+        border-top: 2px solid #e2e8f0;
+    }
+
+    .action-btn {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 1.25rem 2rem;
+        border-radius: 16px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 2px solid;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn i {
+            font-size: 1.2rem;
+        }
+
+    .btn-enroll {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        border-color: #10b981;
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    }
+
+        .btn-enroll:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4);
+            color: white;
+        }
+
+        .btn-enroll:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+    .btn-cancel {
+        background: white;
+        color: #64748b;
+        border-color: #e2e8f0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+        .btn-cancel:hover {
+            background: #f8fafc;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            color: #64748b;
+        }
+
+    .enrollment-preview {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.05));
+        border-radius: 16px;
+        border: 2px dashed rgba(16, 185, 129, 0.3);
+        display: none;
+    }
+
+        .enrollment-preview.visible {
+            display: block;
+            animation: fadeInUp 0.4s ease;
+        }
+
+    .preview-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        color: #10b981;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .preview-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+        background: white;
+        border-radius: 12px;
+    }
+
+    .preview-student {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .preview-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 1.25rem;
+    }
+
+    .preview-arrow {
+        color: #10b981;
+        font-size: 1.5rem;
+        animation: pulse 2s infinite;
+    }
+
+    .preview-course {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1.25rem;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        border-radius: 10px;
+        font-weight: 600;
+    }
+
+    .loading-state {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .loading-state.active {
+            display: flex;
+        }
+
+    .loading-spinner {
+        background: white;
+        padding: 2rem 3rem;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .spinner {
+        width: 60px;
+        height: 60px;
+        border: 5px solid #e2e8f0;
+        border-top-color: #4f46e5;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+
+    
+
+    .loading-text {
+        color: #1e293b;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    
+</style>
+
+<div class="enroll-container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-user-plus"></i>
+            Enroll Student in Course
+        </h1>
+        <p class="page-subtitle">Select a course to enroll the student</p>
     </div>
 
-    <button type="submit" class="btn btn-primary">Enroll</button>
-    <a asp-action="Details" asp-route-id="@Model.StudentId" class="btn btn-secondary">Cancel</a>
-</form>
+    <div class="student-card">
+        <div class="student-info">
+            <div class="student-avatar">
+                @(Model.FirstName?.Substring(0, 1).ToUpper())@(Model.LastName?.Substring(0, 1).ToUpper())
+            </div>
+            <div class="student-details">
+                <h2>@Model.FirstName @Model.LastName</h2>
+                <div class="student-meta">
+                    <span class="meta-item">
+                        <i class="fas fa-envelope"></i>
+                        @Model.Email
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-graduation-cap"></i>
+                        @Model.Program
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-star"></i>
+                        GPA: @Model.GPA.ToString("F2")
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <div class="form-header">
+            <i class="fas fa-book-open"></i>
+            <h3>Course Selection</h3>
+        </div>
+
+        <form asp-action="Enroll" method="post" id="enrollForm">
+            <input type="hidden" name="studentId" value="@Model.StudentId" />
+
+            <div class="form-group">
+                <label>
+                    <i class="fas fa-list"></i>
+                    Select Course
+                </label>
+                <div class="course-select-wrapper">
+                    <i class="fas fa-book select-icon"></i>
+                    <select name="courseId" class="form-control" asp-items="ViewBag.Courses" id="courseSelect" required>
+                        <option value="">-- Choose a course --</option>
+                    </select>
+                    <i class="fas fa-chevron-down select-arrow"></i>
+                </div>
+                <div class="course-info" id="courseInfo">
+                    <p>
+                        <i class="fas fa-info-circle"></i>
+                        Course selected successfully. Review and click Enroll to confirm.
+                    </p>
+                </div>
+            </div>
+
+            <div class="enrollment-preview" id="enrollmentPreview">
+                <div class="preview-header">
+                    <i class="fas fa-check-circle"></i>
+                    Enrollment Preview
+                </div>
+                <div class="preview-content">
+                    <div class="preview-student">
+                        <div class="preview-avatar">
+                            @(Model.FirstName?.Substring(0, 1).ToUpper())@(Model.LastName?.Substring(0, 1).ToUpper())
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; color: #1e293b;">@Model.FirstName @Model.LastName</div>
+                            <div style="font-size: 0.875rem; color: #64748b;">Student</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-arrow-right preview-arrow"></i>
+                    <div class="preview-course">
+                        <i class="fas fa-book"></i>
+                        <span id="selectedCourseName">Course Name</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="action-btn btn-enroll" id="enrollBtn" disabled>
+                    <i class="fas fa-user-check"></i>
+                    Enroll Student
+                </button>
+                <a asp-action="Details" asp-route-id="@Model.StudentId" class="action-btn btn-cancel">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="loading-state" id="loadingState">
+    <div class="loading-spinner">
+        <div class="spinner"></div>
+        <div class="loading-text">Enrolling student...</div>
+    </div>
+</div>
+
+<script>
+    // Course selection handling
+    const courseSelect = document.getElementById('courseSelect');
+    const courseInfo = document.getElementById('courseInfo');
+    const enrollBtn = document.getElementById('enrollBtn');
+    const enrollmentPreview = document.getElementById('enrollmentPreview');
+    const selectedCourseName = document.getElementById('selectedCourseName');
+    const form = document.getElementById('enrollForm');
+    const loadingState = document.getElementById('loadingState');
+
+    courseSelect.addEventListener('change', function() {
+        if (this.value) {
+            courseInfo.classList.add('visible');
+            enrollBtn.disabled = false;
+            enrollmentPreview.classList.add('visible');
+
+            // Update preview with selected course name
+            const selectedOption = this.options[this.selectedIndex];
+            selectedCourseName.textContent = selectedOption.text;
+        } else {
+            courseInfo.classList.remove('visible');
+            enrollBtn.disabled = true;
+            enrollmentPreview.classList.remove('visible');
+        }
+    });
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        if (courseSelect.value) {
+            loadingState.classList.add('active');
+        }
+    });
+
+    // Add ripple effect to buttons
+    document.querySelectorAll('.action-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            if (this.classList.contains('btn-cancel')) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(0, 0, 0, 0.1)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s ease-out';
+                ripple.style.pointerEvents = 'none';
+
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            }
+        });
+    });
+
+    // Add keyframe for ripple animation
+    const style = document.createElement('style');
+   
+    document.head.appendChild(style);
+
+    // Animate select arrow on focus
+    courseSelect.addEventListener('focus', function() {
+        const arrow = document.querySelector('.select-arrow');
+        arrow.style.transform = 'translateY(-50%) rotate(180deg)';
+    });
+
+    courseSelect.addEventListener('blur', function() {
+        const arrow = document.querySelector('.select-arrow');
+        arrow.style.transform = 'translateY(-50%) rotate(0deg)';
+    });
+</script>

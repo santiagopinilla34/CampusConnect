@@ -1,41 +1,599 @@
 ﻿@model CampusConnect.Models.Course
 @{
-    ViewData["Title"] = "Edit Course";
+
+    ViewData
+[
+"Title"
+]
+ 
+=
+ 
+"Edit Course"
+;
+
 }
 
-<h1>Edit Course</h1>
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="CourseId" />
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+        <!-- Page Header -->
+        <div class="page-header mb-4 animate-fade-in">
+            <div class="d-flex align-items-center mb-3">
+                <div class="icon-box me-3">
+                    <i class="fas fa-edit"></i>
+                </div>
+                <div>
+                    <h1 class="mb-1">Edit Course</h1>
+                    <p class="text-muted mb-0">Update course information for <strong>@Model.Code</strong></p>
+                </div>
+            </div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Courses" asp-action="Index">Courses</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Courses" asp-action="Details" asp-route-id="@Model.CourseId">@Model.Code</a></li>
+                    <li class="breadcrumb-item active">Edit</li>
+                </ol>
+            </nav>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Code"></label>
-        <input asp-for="Code" class="form-control" />
-        <span asp-validation-for="Code" class="text-danger"></span>
+        <!-- Original Values Card -->
+        <div class="card info-banner mb-4 animate-slide-up">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-info-circle text-primary me-3 fs-4"></i>
+                    <div class="flex-grow-1">
+                        <strong>Current Course:</strong> @Model.Title
+                        <small class="text-muted d-block">Last updated on @DateTime.Now.ToString("MMM dd, yyyy")</small>
+                    </div>
+                    <a asp-action="Details" asp-route-id="@Model.CourseId" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-eye me-1"></i>View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Card -->
+        <div class="card form-card animate-slide-up" style="animation-delay: 0.1s;">
+            <div class="card-body p-4 p-md-5">
+                <form asp-action="Edit" method="post" id="editForm">
+                    <input type="hidden" asp-for="CourseId" />
+                    
+                    <!-- Course Code -->
+                    <div class="form-group mb-4">
+                        <label asp-for="Code" class="form-label">
+                            <i class="fas fa-hashtag me-2 text-primary"></i>Course Code
+                            <span class="required-indicator">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-code"></i>
+                            </span>
+                            <input asp-for="Code" class="form-control form-control-lg" placeholder="e.g., CS101" />
+                            <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('Code').value = '@Model.Code'" title="Reset to original">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Code" class="text-danger small mt-1 d-block"></span>
+                        <div class="form-comparison mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-history me-1"></i>Original: <strong>@Model.Code</strong>
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Course Title -->
+                    <div class="form-group mb-4">
+                        <label asp-for="Title" class="form-label">
+                            <i class="fas fa-heading me-2 text-primary"></i>Course Title
+                            <span class="required-indicator">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-book"></i>
+                            </span>
+                            <input asp-for="Title" class="form-control form-control-lg" placeholder="e.g., Introduction to Computer Science" id="titleInput" />
+                            <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('Title').value = '@Model.Title'" title="Reset to original">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Title" class="text-danger small mt-1 d-block"></span>
+                        <div class="form-comparison mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-history me-1"></i>Original: <strong>@Model.Title</strong>
+                            </small>
+                        </div>
+                        <div class="char-counter mt-1">
+                            <small class="text-muted">
+                                <span id="charCount">0</span> characters
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Instructor -->
+                    <div class="form-group mb-4">
+                        <label asp-for="Instructor" class="form-label">
+                            <i class="fas fa-chalkboard-teacher me-2 text-primary"></i>Instructor
+                            <span class="required-indicator">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-user-tie"></i>
+                            </span>
+                            <input asp-for="Instructor" class="form-control form-control-lg" placeholder="e.g., Dr. Jane Smith" />
+                            <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('Instructor').value = '@Model.Instructor'" title="Reset to original">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Instructor" class="text-danger small mt-1 d-block"></span>
+                        <div class="form-comparison mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-history me-1"></i>Original: <strong>@Model.Instructor</strong>
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Students Enrolled -->
+                    <div class="form-group mb-5">
+                        <label asp-for="StudentsEnrolled" class="form-label">
+                            <i class="fas fa-users me-2 text-primary"></i>Students Enrolled
+                            <span class="required-indicator">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-user-graduate"></i>
+                            </span>
+                            <input asp-for="StudentsEnrolled" type="number" class="form-control form-control-lg" placeholder="0" min="0" max="200" id="enrollmentInput" />
+                            <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('StudentsEnrolled').value = '@Model.StudentsEnrolled'" title="Reset to original">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="StudentsEnrolled" class="text-danger small mt-1 d-block"></span>
+                        <div class="form-comparison mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-history me-1"></i>Original: <strong>@Model.StudentsEnrolled students</strong>
+                            </small>
+                        </div>
+                        <div class="enrollment-preview mt-3 p-3 rounded" id="enrollmentPreview">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <small class="text-muted">Enrollment Capacity</small>
+                                <small class="text-muted"><span id="previewCount">@Model.StudentsEnrolled</span> / 50 students</small>
+                            </div>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: @((Model.StudentsEnrolled / 50.0 * 100))%" id="progressBar"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Change Summary -->
+                    <div class="card changes-card mb-4" id="changesCard" style="display: none;">
+                        <div class="card-body">
+                            <h6 class="card-title mb-3">
+                                <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                                Changes Summary
+                            </h6>
+                            <ul class="list-unstyled mb-0" id="changesList">
+                                <!-- Changes will be populated here -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex gap-3 justify-content-end flex-wrap">
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-4">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                        <button type="button" class="btn btn-outline-primary btn-lg px-4" onclick="resetForm()">
+                            <i class="fas fa-undo-alt me-2"></i>Reset All
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-lg px-5" id="saveBtn">
+                            <i class="fas fa-save me-2"></i>Save Changes
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <!-- Warning Card -->
+        <div class="card warning-card mt-4 animate-slide-up" style="animation-delay: 0.2s;">
+            <div class="card-body">
+                <h5 class="card-title d-flex align-items-center mb-3">
+                    <i class="fas fa-shield-alt me-2 text-warning"></i>
+                    Before Saving
+                </h5>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Verify all information is accurate and up-to-date
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Changes will be reflected immediately in the system
+                    </li>
+                    <li class="mb-0">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Students and staff will see the updated information
+                    </li>
+                </ul>
+            </div>
+        </div>
+
     </div>
+</div>
 
-    <div class="form-group">
-        <label asp-for="Title"></label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
-    </div>
+<style>
+    .icon-box {
+        width: 64px;
+        height: 64px;
+        background: linear-gradient(135deg, var(--accent), #d97706);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        color: white;
+        box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+        animation: float 3s ease-in-out infinite;
+    }
 
-    <div class="form-group">
-        <label asp-for="Instructor"></label>
-        <input asp-for="Instructor" class="form-control" />
-        <span asp-validation-for="Instructor" class="text-danger"></span>
-    </div>
+    
 
-    <div class="form-group">
-        <label asp-for="StudentsEnrolled"></label>
-        <input asp-for="StudentsEnrolled" class="form-control" />
-        <span asp-validation-for="StudentsEnrolled" class="text-danger"></span>
-    </div>
+    .breadcrumb {
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 0;
+    }
 
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+    .breadcrumb-item a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .breadcrumb-item a:hover {
+        color: var(--primary-dark);
+    }
+
+    .breadcrumb-item.active {
+        color: var(--text-secondary);
+    }
+
+    .info-banner {
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.08), rgba(6, 182, 212, 0.08));
+        border: 2px solid rgba(79, 70, 229, 0.15);
+        border-left: 4px solid var(--primary);
+    }
+
+    .form-card {
+        position: relative;
+        overflow: visible;
+    }
+
+    .form-card::after {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, var(--accent), #d97706, var(--primary));
+        border-radius: 20px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .form-card:hover::after {
+        opacity: 0.1;
+    }
+
+    .form-label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .required-indicator {
+        color: #dc3545;
+        margin-left: 0.25rem;
+        font-weight: 700;
+    }
+
+    .input-group-text {
+        background: rgba(245, 158, 11, 0.08);
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        border-right: none;
+        color: var(--accent);
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .form-control-lg {
+        font-size: 1rem;
+        height: calc(3.5rem + 2px);
+    }
+
+    .input-group:focus-within .input-group-text {
+        background: rgba(245, 158, 11, 0.15);
+        border-color: var(--accent);
+    }
+
+    .form-control {
+        border-left: none;
+        border-right: none;
+    }
+
+    .form-control:focus {
+        border-color: var(--accent);
+        border-left: 2px solid var(--accent);
+        border-right: 2px solid var(--accent);
+    }
+
+    .input-group .btn-outline-secondary {
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        border-left: none;
+        color: var(--text-secondary);
+        transition: all 0.3s ease;
+    }
+
+    .input-group .btn-outline-secondary:hover {
+        background: var(--text-secondary);
+        color: white;
+        border-color: var(--text-secondary);
+    }
+
+    .form-comparison {
+        padding: 0.5rem 0.75rem;
+        background: rgba(0, 0, 0, 0.02);
+        border-radius: 8px;
+        border-left: 3px solid rgba(79, 70, 229, 0.3);
+    }
+
+    .char-counter {
+        text-align: right;
+    }
+
+    .enrollment-preview {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(5, 150, 105, 0.08));
+        border: 2px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .changes-card {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(217, 119, 6, 0.08));
+        border: 2px solid rgba(245, 158, 11, 0.3);
+        border-left: 4px solid var(--accent);
+    }
+
+    .changes-card .card-title {
+        color: var(--text-primary);
+        font-weight: 700;
+    }
+
+    .changes-card ul li {
+        padding: 0.5rem 0;
+        color: var(--text-secondary);
+    }
+
+    .warning-card {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(217, 119, 6, 0.05));
+        border: 2px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .warning-card .card-title {
+        color: var(--text-primary);
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+
+    .warning-card ul li {
+        color: var(--text-secondary);
+        padding: 0.5rem 0;
+        transition: all 0.3s ease;
+    }
+
+    .warning-card ul li:hover {
+        color: var(--text-primary);
+        transform: translateX(5px);
+    }
+
+    .btn-outline-primary {
+        border: 2px solid var(--primary);
+        color: var(--primary);
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background: var(--primary);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    /* Animations */
+   
+    .animate-fade-in {
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .animate-slide-up {
+        animation: slideUp 0.6s ease-out;
+        animation-fill-mode: both;
+    }
+
+    /* Form validation styling */
+    .form-control.is-invalid {
+        border-color: #dc3545;
+    }
+
+    .form-control.is-valid {
+        border-color: #10b981;
+    }
+
+    .form-control.changed {
+        border-color: var(--accent);
+        background: rgba(245, 158, 11, 0.05);
+    }
+
+    /* Responsive */
+    
+</style>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // Store original values
+        const originalValues = {
+            code: '@Model.Code',
+            title: '@Model.Title',
+            instructor: '@Model.Instructor',
+            studentsEnrolled: @Model.StudentsEnrolled
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('editForm');
+            const inputs = form.querySelectorAll('input[type="text"], input[type="number"]');
+            const changesCard = document.getElementById('changesCard');
+            const changesList = document.getElementById('changesList');
+            const saveBtn = document.getElementById('saveBtn');
+            
+            // Character counter for title
+            const titleInput = document.getElementById('Title');
+            const charCount = document.getElementById('charCount');
+            
+            function updateCharCount() {
+                charCount.textContent = titleInput.value.length;
+            }
+            
+            titleInput.addEventListener('input', updateCharCount);
+            updateCharCount();
+
+            // Enrollment preview
+            const enrollmentInput = document.getElementById('StudentsEnrolled');
+            const previewCount = document.getElementById('previewCount');
+            const progressBar = document.getElementById('progressBar');
+
+            function updateEnrollmentPreview() {
+                const value = parseInt(enrollmentInput.value) || 0;
+                previewCount.textContent = value;
+                const percentage = Math.min((value / 50) * 100, 100);
+                progressBar.style.width = percentage + '%';
+                
+                // Change color based on capacity
+                if (percentage >= 90) {
+                    progressBar.className = 'progress-bar bg-danger';
+                } else if (percentage >= 70) {
+                    progressBar.className = 'progress-bar bg-warning';
+                } else {
+                    progressBar.className = 'progress-bar bg-success';
+                }
+            }
+
+            enrollmentInput.addEventListener('input', updateEnrollmentPreview);
+
+            // Track changes
+            function checkChanges() {
+                const changes = [];
+                
+                if (document.getElementById('Code').value !== originalValues.code) {
+                    changes.push(`<li><i class="fas fa-arrow-right text-warning me-2"></i><strong>Course Code:</strong> ${originalValues.code} → ${document.getElementById('Code').value}</li>`);
+                }
+                
+                if (document.getElementById('Title').value !== originalValues.title) {
+                    changes.push(`<li><i class="fas fa-arrow-right text-warning me-2"></i><strong>Course Title:</strong> ${originalValues.title} → ${document.getElementById('Title').value}</li>`);
+                }
+                
+                if (document.getElementById('Instructor').value !== originalValues.instructor) {
+                    changes.push(`<li><i class="fas fa-arrow-right text-warning me-2"></i><strong>Instructor:</strong> ${originalValues.instructor} → ${document.getElementById('Instructor').value}</li>`);
+                }
+                
+                if (parseInt(document.getElementById('StudentsEnrolled').value) !== originalValues.studentsEnrolled) {
+                    changes.push(`<li><i class="fas fa-arrow-right text-warning me-2"></i><strong>Students Enrolled:</strong> ${originalValues.studentsEnrolled} → ${document.getElementById('StudentsEnrolled').value}</li>`);
+                }
+
+                if (changes.length > 0) {
+                    changesList.innerHTML = changes.join('');
+                    changesCard.style.display = 'block';
+                    saveBtn.innerHTML = '<i class="fas fa-save me-2"></i>Save ' + changes.length + ' Change' + (changes.length > 1 ? 's' : '');
+                } else {
+                    changesCard.style.display = 'none';
+                    saveBtn.innerHTML = '<i class="fas fa-save me-2"></i>Save Changes';
+                }
+            }
+
+            // Highlight changed fields
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    const fieldName = this.getAttribute('name');
+                    let originalValue = originalValues[fieldName.toLowerCase().replace('students', 'students')];
+                    
+                    if (fieldName === 'StudentsEnrolled') {
+                        originalValue = originalValues.studentsEnrolled;
+                        if (parseInt(this.value) !== originalValue) {
+                            this.classList.add('changed');
+                        } else {
+                            this.classList.remove('changed');
+                        }
+                    } else {
+                        if (this.value !== originalValue) {
+                            this.classList.add('changed');
+                        } else {
+                            this.classList.remove('changed');
+                        }
+                    }
+                    
+                    checkChanges();
+                });
+
+                // Add smooth focus animation
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'scale(1.02)';
+                    this.parentElement.style.transition = 'transform 0.3s ease';
+                });
+
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
+            });
+
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving Changes...';
+                saveBtn.disabled = true;
+            });
+
+            // Auto-uppercase for course code
+            const codeInput = document.getElementById('Code');
+            codeInput.addEventListener('input', function() {
+                this.value = this.value.toUpperCase();
+            });
+        });
+
+        // Reset form function
+        function resetForm() {
+            if (confirm('Are you sure you want to reset all fields to their original values?')) {
+                document.getElementById('Code').value = originalValues.code;
+                document.getElementById('Title').value = originalValues.title;
+                document.getElementById('Instructor').value = originalValues.instructor;
+                document.getElementById('StudentsEnrolled').value = originalValues.studentsEnrolled;
+                
+                // Remove changed classes
+                document.querySelectorAll('.changed').forEach(el => el.classList.remove('changed'));
+                
+                // Update displays
+                document.getElementById('charCount').textContent = originalValues.title.length;
+                document.getElementById('previewCount').textContent = originalValues.studentsEnrolled;
+                document.getElementById('progressBar').style.width = ((originalValues.studentsEnrolled / 50) * 100) + '%';
+                document.getElementById('changesCard').style.display = 'none';
+            }
+        }
+    </script>
 }

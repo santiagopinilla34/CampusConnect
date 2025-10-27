@@ -1,18 +1,697 @@
 ﻿@model CampusConnect.Models.Course
+
 @{
-    ViewData["Title"] = "Course Details";
+
+    ViewData
+[
+"Title"
+]
+ 
+=
+ 
+"Course Details"
+;
+
 }
 
-<h1>Course Details</h1>
 
-<div>
-    <p><strong>Code:</strong> @Model.Code</p>
-    <p><strong>Title:</strong> @Model.Title</p>
-    <p><strong>Instructor:</strong> @Model.Instructor</p>
-    <p><strong>Students Enrolled:</strong> @Model.StudentsEnrolled</p>
+<div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-9">
+        <!-- Page Header -->
+        <div class="page-header mb-4 animate-fade-in">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
+                <div class="d-flex align-items-center">
+                    <div class="icon-box me-3">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div>
+                        <h1 class="mb-1">Course Details</h1>
+                        <p class="text-muted mb-0">Complete course information</p>
+                    </div>
+                </div>
+                <div class="action-buttons d-flex gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model.CourseId" class="btn btn-warning btn-action">
+                        <i class="fas fa-edit"></i>
+                        <span class="btn-text">Edit</span>
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-action">
+                        <i class="fas fa-arrow-left"></i>
+                        <span class="btn-text">Back</span>
+                    </a>
+                </div>
+            </div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Courses" asp-action="Index">Courses</a></li>
+                    <li class="breadcrumb-item active">@Model.Code</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="row g-4">
+            <!-- Main Course Information -->
+            <div class="col-lg-8">
+                <!-- Course Overview Card -->
+                <div class="card details-card animate-slide-up mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0">
+                            <i class="fas fa-info-circle me-2"></i>Course Overview
+                        </h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="course-details">
+                            <div class="detail-row">
+                                <div class="detail-icon">
+                                    <i class="fas fa-hashtag"></i>
+                                </div>
+                                <div class="detail-content">
+                                    <span class="detail-label">Course Code</span>
+                                    <span class="detail-value">@Model.Code</span>
+                                </div>
+                                <div class="detail-badge">
+                                    <span class="badge bg-primary">
+                                        <i class="fas fa-tag me-1"></i>Active
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="detail-row">
+                                <div class="detail-icon bg-gradient-secondary">
+                                    <i class="fas fa-heading"></i>
+                                </div>
+                                <div class="detail-content">
+                                    <span class="detail-label">Course Title</span>
+                                    <span class="detail-value">@Model.Title</span>
+                                </div>
+                            </div>
+
+                            <div class="detail-row">
+                                <div class="detail-icon bg-gradient-accent">
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                </div>
+                                <div class="detail-content">
+                                    <span class="detail-label">Instructor</span>
+                                    <span class="detail-value">@Model.Instructor</span>
+                                </div>
+                                <div class="detail-badge">
+                                    <span class="instructor-avatar">
+                                        <i class="fas fa-user-tie"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="detail-row">
+                                <div class="detail-icon bg-gradient-success">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="detail-content">
+                                    <span class="detail-label">Students Enrolled</span>
+                                    <span class="detail-value">@Model.StudentsEnrolled Students</span>
+                                    <div class="progress mt-2" style="height: 8px;">
+                                        <div class="progress-bar bg-success" role="progressbar" 
+                                             style="width: @(Math.Min((Model.StudentsEnrolled / 50.0) * 100, 100))%"
+                                             aria-valuenow="@Model.StudentsEnrolled" 
+                                             aria-valuemin="0" 
+                                             aria-valuemax="50">
+                                        </div>
+                                    </div>
+                                    <small class="text-muted mt-1">
+                                        @(50 - Model.StudentsEnrolled > 0 ? $"{50 - Model.StudentsEnrolled} seats available" : "Course full")
+                                    </small>
+                                </div>
+                                <div class="detail-badge">
+                                    <span class="enrollment-badge">
+                                        <i class="fas fa-user-graduate"></i>
+                                        <strong>@Model.StudentsEnrolled</strong>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions Card -->
+                <div class="card actions-card animate-slide-up" style="animation-delay: 0.1s;">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-bolt me-2"></i>Quick Actions
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <a asp-action="Edit" asp-route-id="@Model.CourseId" class="quick-action-btn">
+                                    <div class="quick-action-icon">
+                                        <i class="fas fa-edit"></i>
+                                    </div>
+                                    <div class="quick-action-content">
+                                        <h6 class="mb-1">Edit Course</h6>
+                                        <small class="text-muted">Update information</small>
+                                    </div>
+                                    <i class="fas fa-chevron-right ms-auto"></i>
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="#" class="quick-action-btn" onclick="alert('Feature coming soon!'); return false;">
+                                    <div class="quick-action-icon bg-gradient-secondary">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="quick-action-content">
+                                        <h6 class="mb-1">Add Students</h6>
+                                        <small class="text-muted">Manage enrollment</small>
+                                    </div>
+                                    <i class="fas fa-chevron-right ms-auto"></i>
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="#" class="quick-action-btn" onclick="alert('Feature coming soon!'); return false;">
+                                    <div class="quick-action-icon bg-gradient-success">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <div class="quick-action-content">
+                                        <h6 class="mb-1">View Syllabus</h6>
+                                        <small class="text-muted">Course materials</small>
+                                    </div>
+                                    <i class="fas fa-chevron-right ms-auto"></i>
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="#" class="quick-action-btn" onclick="alert('Feature coming soon!'); return false;">
+                                    <div class="quick-action-icon bg-gradient-accent">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </div>
+                                    <div class="quick-action-content">
+                                        <h6 class="mb-1">View Analytics</h6>
+                                        <small class="text-muted">Performance data</small>
+                                    </div>
+                                    <i class="fas fa-chevron-right ms-auto"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Stats Card -->
+                <div class="card stats-card animate-slide-up" style="animation-delay: 0.15s;">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-4">
+                            <i class="fas fa-chart-line me-2"></i>Statistics
+                        </h5>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 class="mb-0">@Model.StudentsEnrolled</h3>
+                                <small class="text-muted">Total Students</small>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon bg-secondary">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 class="mb-0">@((Model.StudentsEnrolled / 50.0 * 100).ToString("F0"))%</h3>
+                                <small class="text-muted">Capacity Filled</small>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon bg-success">
+                                <i class="fas fa-chair"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 class="mb-0">@(50 - Model.StudentsEnrolled)</h3>
+                                <small class="text-muted">Available Seats</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course Status Card -->
+                <div class="card status-card mt-4 animate-slide-up" style="animation-delay: 0.2s;">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-3">
+                            <i class="fas fa-toggle-on me-2"></i>Course Status
+                        </h5>
+                        <div class="status-list">
+                            <div class="status-item">
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span>Active</span>
+                            </div>
+                            <div class="status-item">
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span>Enrollments Open</span>
+                            </div>
+                            <div class="status-item">
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span>Materials Available</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Card -->
+                <div class="card info-card mt-4 animate-slide-up" style="animation-delay: 0.25s;">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">
+                            <i class="fas fa-lightbulb me-2 text-warning"></i>
+                            Quick Info
+                        </h6>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-calendar text-primary me-2"></i>
+                                <small>Semester: Fall 2024</small>
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-clock text-primary me-2"></i>
+                                <small>Duration: 15 Weeks</small>
+                            </li>
+                            <li class="mb-0">
+                                <i class="fas fa-award text-primary me-2"></i>
+                                <small>Credits: 3.0</small>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
-<p>
-    <a asp-action="Edit" asp-route-id="@Model.CourseId" class="btn btn-warning">Edit</a>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-</p>
+<style>
+    .icon-box {
+        width: 64px;
+        height: 64px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        color: white;
+        box-shadow: var(--shadow-lg);
+        animation: float 3s ease-in-out infinite;
+    }
+
+    
+
+    .breadcrumb {
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 0;
+    }
+
+    .breadcrumb-item a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .breadcrumb-item a:hover {
+        color: var(--primary-dark);
+    }
+
+    .breadcrumb-item.active {
+        color: var(--text-secondary);
+    }
+
+    .btn-action {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1.25rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .btn-action i {
+        font-size: 1rem;
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        border: none;
+        color: white;
+        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+    }
+
+    .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+        background: linear-gradient(135deg, #d97706, #b45309);
+    }
+
+    .details-card {
+        position: relative;
+        overflow: visible;
+    }
+
+    .details-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+    }
+
+    .details-card .card-header,
+    .actions-card .card-header,
+    .stats-card .card-title,
+    .status-card .card-title {
+        color: var(--text-primary);
+        font-weight: 700;
+    }
+
+    .details-card .card-header,
+    .actions-card .card-header {
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.08), rgba(6, 182, 212, 0.08));
+        border-bottom: 2px solid rgba(79, 70, 229, 0.1);
+        padding: 1.25rem 1.5rem;
+    }
+
+    .course-details {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .detail-row {
+        display: flex;
+        align-items: center;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.03), rgba(6, 182, 212, 0.03));
+        border-radius: 16px;
+        border: 2px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .detail-row::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: linear-gradient(180deg, var(--primary), var(--secondary));
+        transform: scaleY(0);
+        transition: transform 0.3s ease;
+    }
+
+    .detail-row:hover {
+        transform: translateX(8px);
+        border-color: rgba(79, 70, 229, 0.2);
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.08), rgba(6, 182, 212, 0.08));
+        box-shadow: var(--shadow-md);
+    }
+
+    .detail-row:hover::before {
+        transform: scaleY(1);
+    }
+
+    .detail-icon {
+        width: 56px;
+        height: 56px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+    }
+
+    .detail-row:hover .detail-icon {
+        transform: rotate(10deg) scale(1.1);
+    }
+
+    .bg-gradient-secondary {
+        background: linear-gradient(135deg, var(--secondary), #0891b2) !important;
+    }
+
+    .bg-gradient-accent {
+        background: linear-gradient(135deg, var(--accent), #d97706) !important;
+    }
+
+    .bg-gradient-success {
+        background: linear-gradient(135deg, var(--success), #059669) !important;
+    }
+
+    .detail-content {
+        display: flex;
+        flex-direction: column;
+        margin-left: 1.25rem;
+        flex: 1;
+    }
+
+    .detail-label {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.25rem;
+    }
+
+    .detail-value {
+        font-size: 1.15rem;
+        color: var(--text-primary);
+        font-weight: 700;
+    }
+
+    .detail-badge {
+        margin-left: 1rem;
+    }
+
+    .instructor-avatar {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, var(--accent), #d97706);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.25rem;
+        box-shadow: var(--shadow-md);
+    }
+
+    .enrollment-badge {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.75rem;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.15));
+        border-radius: 12px;
+        color: var(--success);
+        min-width: 70px;
+    }
+
+    .enrollment-badge i {
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .enrollment-badge strong {
+        font-size: 1.25rem;
+    }
+
+    .quick-action-btn {
+        display: flex;
+        align-items: center;
+        padding: 1.25rem;
+        background: rgba(255, 255, 255, 0.5);
+        border: 2px solid rgba(0, 0, 0, 0.06);
+        border-radius: 14px;
+        text-decoration: none;
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+        gap: 1rem;
+    }
+
+    .quick-action-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--primary);
+        background: white;
+    }
+
+    .quick-action-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+
+    .quick-action-content h6 {
+        color: var(--text-primary);
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .quick-action-content small {
+        color: var(--text-secondary);
+    }
+
+    .stats-card {
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.05), rgba(6, 182, 212, 0.05));
+        border: 2px solid rgba(79, 70, 229, 0.1);
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        padding: 1.25rem;
+        background: white;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .stat-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .stat-item:hover {
+        transform: translateX(5px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .stat-icon {
+        width: 56px;
+        height: 56px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        margin-right: 1rem;
+    }
+
+    .stat-icon.bg-secondary {
+        background: linear-gradient(135deg, var(--secondary), #0891b2);
+    }
+
+    .stat-icon.bg-success {
+        background: linear-gradient(135deg, var(--success), #059669);
+    }
+
+    .stat-info h3 {
+        font-size: 2rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+    }
+
+    .status-card {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.05));
+        border: 2px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .status-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 0;
+        gap: 0.75rem;
+    }
+
+    .status-item i {
+        font-size: 1.25rem;
+    }
+
+    .status-item span {
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .info-card {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(217, 119, 6, 0.05));
+        border: 2px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .info-card .card-title {
+        color: var(--text-primary);
+        font-weight: 700;
+    }
+
+    /* Animations */
+    
+
+    .animate-fade-in {
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .animate-slide-up {
+        animation: slideUp 0.6s ease-out;
+        animation-fill-mode: both;
+    }
+
+    /* Responsive */
+    
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add ripple effect to action buttons
+        document.querySelectorAll('.quick-action-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: radial-gradient(circle, rgba(79, 70, 229, 0.3) 0%, transparent 70%);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s ease-out;
+                    pointer-events: none;
+                `;
+
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Add CSS for ripple animation
+        const style = document.createElement('style');
+        
+        document.head.appendChild(style);
+    });
+</script>

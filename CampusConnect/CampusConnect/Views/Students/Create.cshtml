@@ -1,45 +1,536 @@
 ﻿@model CampusConnect.Models.Student
 @{
-    ViewData["Title"] = "Add Student";
+
+    ViewData
+[
+"Title"
+]
+ 
+=
+ 
+"Add Student"
+;
+
 }
 
-<h1>Add New Student</h1>
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="FirstName"></label>
-        <input asp-for="FirstName" class="form-control" />
-        <span asp-validation-for="FirstName" class="text-danger"></span>
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+        <!-- Page Header -->
+        <div class="page-header mb-4 animate-fade-in">
+            <div class="d-flex align-items-center mb-3">
+                <div class="icon-box me-3">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div>
+                    <h1 class="mb-1">Add New Student</h1>
+                    <p class="text-muted mb-0">Register a new student in the system</p>
+                </div>
+            </div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Students" asp-action="Index">Students</a></li>
+                    <li class="breadcrumb-item active">Add Student</li>
+                </ol>
+            </nav>
+        </div>
+
+        <!-- Form Card -->
+        <div class="card form-card animate-slide-up">
+            <div class="card-body p-4 p-md-5">
+                <form asp-action="Create" method="post" id="studentForm">
+                    
+                    <!-- Personal Information Section -->
+                    <div class="form-section mb-5">
+                        <h5 class="section-title mb-4">
+                            <i class="fas fa-user-circle me-2"></i>Personal Information
+                        </h5>
+
+                        <div class="row g-4">
+                            <!-- First Name -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="FirstName" class="form-label">
+                                        <i class="fas fa-id-card me-2 text-primary"></i>First Name
+                                        <span class="required-indicator">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                                        <input asp-for="FirstName" class="form-control form-control-lg" placeholder="e.g., John" />
+                                    </div>
+                                    <span asp-validation-for="FirstName" class="text-danger small mt-1 d-block"></span>
+                                </div>
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="LastName" class="form-label">
+                                        <i class="fas fa-id-card me-2 text-primary"></i>Last Name
+                                        <span class="required-indicator">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                                        <input asp-for="LastName" class="form-control form-control-lg" placeholder="e.g., Smith" />
+                                    </div>
+                                    <span asp-validation-for="LastName" class="text-danger small mt-1 d-block"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Full Name Preview -->
+                        <div class="name-preview mt-3 p-3 rounded" id="namePreview" style="display: none;">
+                            <small class="text-muted d-block mb-1">
+                                <i class="fas fa-eye me-1"></i>Full Name Preview:
+                            </small>
+                            <h5 class="mb-0" id="fullNameDisplay"></h5>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information Section -->
+                    <div class="form-section mb-5">
+                        <h5 class="section-title mb-4">
+                            <i class="fas fa-envelope me-2"></i>Contact Information
+                        </h5>
+
+                        <!-- Email -->
+                        <div class="form-group mb-4">
+                            <label asp-for="Email" class="form-label">
+                                <i class="fas fa-at me-2 text-primary"></i>Email Address
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                                <input asp-for="Email" type="email" class="form-control form-control-lg" placeholder="e.g., john.smith@university.edu" />
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger small mt-1 d-block"></span>
+                            <small class="form-text text-muted mt-2 d-block">
+                                <i class="fas fa-info-circle me-1"></i>Use official university email address
+                            </small>
+                            <div class="email-validation mt-2" id="emailFeedback"></div>
+                        </div>
+                    </div>
+
+                    <!-- Academic Information Section -->
+                    <div class="form-section mb-5">
+                        <h5 class="section-title mb-4">
+                            <i class="fas fa-graduation-cap me-2"></i>Academic Information
+                        </h5>
+
+                        <!-- Program -->
+                        <div class="form-group mb-4">
+                            <label asp-for="Program" class="form-label">
+                                <i class="fas fa-book-reader me-2 text-primary"></i>Program / Major
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-university"></i>
+                                </span>
+                                <select asp-for="Program" class="form-select form-control-lg" id="programSelect">
+                                    <option value="">Select a program...</option>
+                                    <option value="Computer Science">Computer Science</option>
+                                    <option value="Business Administration">Business Administration</option>
+                                    <option value="Engineering">Engineering</option>
+                                    <option value="Psychology">Psychology</option>
+                                    <option value="Biology">Biology</option>
+                                    <option value="Mathematics">Mathematics</option>
+                                    <option value="English Literature">English Literature</option>
+                                    <option value="Chemistry">Chemistry</option>
+                                    <option value="Economics">Economics</option>
+                                    <option value="Other">Other (Specify below)</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="Program" class="text-danger small mt-1 d-block"></span>
+                            <input type="text" id="customProgram" class="form-control mt-2" placeholder="Specify program" style="display: none;" />
+                        </div>
+
+                        <!-- GPA -->
+                        <div class="form-group mb-4">
+                            <label asp-for="GPA" class="form-label">
+                                <i class="fas fa-chart-line me-2 text-primary"></i>GPA (Grade Point Average)
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-star"></i>
+                                </span>
+                                <input asp-for="GPA" type="number" step="0.01" min="0" max="4.0" class="form-control form-control-lg" placeholder="0.00" id="gpaInput" />
+                                <span class="input-group-text bg-light">
+                                    / 4.0
+                                </span>
+                            </div>
+                            <span asp-validation-for="GPA" class="text-danger small mt-1 d-block"></span>
+                            
+                            <!-- GPA Visual Indicator -->
+                            <div class="gpa-indicator mt-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <small class="text-muted">Performance Level</small>
+                                    <small class="text-muted"><span id="gpaDisplay">0.00</span> / 4.0</small>
+                                </div>
+                                <div class="progress" style="height: 12px;">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%" id="gpaProgressBar"></div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-2">
+                                    <small class="text-muted">Poor</small>
+                                    <small class="text-muted">Average</small>
+                                    <small class="text-muted">Good</small>
+                                    <small class="text-muted">Excellent</small>
+                                </div>
+                                <div class="gpa-status mt-2 text-center p-2 rounded" id="gpaStatus" style="display: none;">
+                                    <i class="fas fa-award me-1"></i>
+                                    <span id="gpaStatusText"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Student Summary Preview -->
+                    <div class="card summary-card mb-4" id="summaryCard" style="display: none;">
+                        <div class="card-body">
+                            <h6 class="card-title mb-3">
+                                <i class="fas fa-clipboard-check text-success me-2"></i>
+                                Student Profile Preview
+                            </h6>
+                            <div class="student-preview">
+                                <div class="preview-avatar mb-3">
+                                    <div class="avatar-circle">
+                                        <span id="avatarInitials">?</span>
+                                    </div>
+                                </div>
+                                <div class="preview-details">
+                                    <h5 id="previewName" class="mb-2">-</h5>
+                                    <p class="mb-1"><i class="fas fa-envelope text-primary me-2"></i><span id="previewEmail">-</span></p>
+                                    <p class="mb-1"><i class="fas fa-graduation-cap text-primary me-2"></i><span id="previewProgram">-</span></p>
+                                    <p class="mb-0"><i class="fas fa-chart-line text-primary me-2"></i>GPA: <span id="previewGPA">-</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex gap-3 justify-content-end flex-wrap">
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-4">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-lg px-5" id="submitBtn">
+                            <i class="fas fa-user-plus me-2"></i>Add Student
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <!-- Help Card -->
+        <div class="card help-card mt-4 animate-slide-up" style="animation-delay: 0.1s;">
+            <div class="card-body">
+                <h5 class="card-title d-flex align-items-center mb-3">
+                    <i class="fas fa-lightbulb me-2 text-warning"></i>
+                    Registration Guidelines
+                </h5>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        All fields marked with <span class="text-danger">*</span> are required
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Email must be unique and follow university format
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        GPA should be entered on a 4.0 scale
+                    </li>
+                    <li class="mb-0">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Student will receive a confirmation email after registration
+                    </li>
+                </ul>
+            </div>
+        </div>
+
     </div>
+</div>
 
-    <div class="form-group">
-        <label asp-for="LastName"></label>
-        <input asp-for="LastName" class="form-control" />
-        <span asp-validation-for="LastName" class="text-danger"></span>
-    </div>
+<style>
+    .icon-box {
+        width: 64px;
+        height: 64px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        color: white;
+        box-shadow: var(--shadow-lg);
+        animation: float 3s ease-in-out infinite;
+    }
 
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
+    
 
-    <div class="form-group">
-        <label asp-for="Program"></label>
-        <input asp-for="Program" class="form-control" />
-        <span asp-validation-for="Program" class="text-danger"></span>
-    </div>
+    .breadcrumb {
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 0;
+    }
 
-    <div class="form-group">
-        <label asp-for="GPA"></label>
-        <input asp-for="GPA" class="form-control" />
-        <span asp-validation-for="GPA" class="text-danger"></span>
-    </div>
+    .breadcrumb-item a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
 
-    <button type="submit" class="btn btn-primary">Add</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+    .breadcrumb-item a:hover {
+        color: var(--primary-dark);
+    }
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+    .breadcrumb-item.active {
+        color: var(--text-secondary);
+    }
+
+    .form-card {
+        position: relative;
+        overflow: visible;
+    }
+
+    .form-card::after {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+        border-radius: 20px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .form-card:hover::after {
+        opacity: 0.1;
+    }
+
+    .form-section {
+        position: relative;
+        padding-top: 1rem;
+    }
+
+    .section-title {
+        color: var(--text-primary);
+        font-weight: 700;
+        padding-bottom: 0.75rem;
+        border-bottom: 3px solid rgba(79, 70, 229, 0.1);
+        display: flex;
+        align-items: center;
+    }
+
+    .form-label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .required-indicator {
+        color: #dc3545;
+        margin-left: 0.25rem;
+        font-weight: 700;
+    }
+
+    .input-group-text {
+        background: rgba(79, 70, 229, 0.08);
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        border-right: none;
+        color: var(--primary);
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .form-control-lg, .form-select {
+        font-size: 1rem;
+        height: calc(3.5rem + 2px);
+    }
+
+    .input-group:focus-within .input-group-text {
+        background: rgba(79, 70, 229, 0.15);
+        border-color: var(--primary);
+    }
+
+    .form-control, .form-select {
+        border-left: none;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary);
+        border-left: 2px solid var(--primary);
+    }
+
+    .form-text {
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        display: block;
+    }
+
+    .name-preview {
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.08), rgba(6, 182, 212, 0.08));
+        border: 2px solid rgba(79, 70, 229, 0.2);
+        border-left: 4px solid var(--primary);
+    }
+
+    .name-preview h5 {
+        color: var(--text-primary);
+        font-weight: 700;
+    }
+
+    .email-validation.valid {
+        color: var(--success);
+        font-size: 0.85rem;
+    }
+
+    .email-validation.valid::before {
+        content: '✓ ';
+        font-weight: bold;
+    }
+
+    .email-validation.invalid {
+        color: #dc3545;
+        font-size: 0.85rem;
+    }
+
+    .email-validation.invalid::before {
+        content: '✗ ';
+        font-weight: bold;
+    }
+
+    .gpa-indicator {
+        padding: 1rem;
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.05), rgba(6, 182, 212, 0.05));
+        border-radius: 12px;
+        border: 2px solid rgba(79, 70, 229, 0.1);
+    }
+
+    .gpa-status {
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .gpa-status.excellent {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.15));
+        color: var(--success);
+    }
+
+    .gpa-status.good {
+        background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(8, 145, 178, 0.15));
+        color: var(--secondary);
+    }
+
+    .gpa-status.average {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.15));
+        color: var(--accent);
+    }
+
+    .gpa-status.poor {
+        background: linear-gradient(135deg, rgba(220, 53, 69, 0.15), rgba(200, 35, 51, 0.15));
+        color: #dc3545;
+    }
+
+    .summary-card {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(5, 150, 105, 0.08));
+        border: 2px solid rgba(16, 185, 129, 0.2);
+        border-left: 4px solid var(--success);
+    }
+
+    .summary-card .card-title {
+        color: var(--text-primary);
+        font-weight: 700;
+    }
+
+    .student-preview {
+        text-align: center;
+    }
+
+    .preview-avatar {
+        display: flex;
+        justify-content: center;
+    }
+
+    .avatar-circle {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+        font-weight: 700;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .preview-details {
+        text-align: left;
+    }
+
+    .preview-details h5 {
+        color: var(--text-primary);
+        font-weight: 700;
+    }
+
+    .preview-details p {
+        color: var(--text-secondary);
+    }
+
+    .help-card {
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.05), rgba(6, 182, 212, 0.05));
+        border: 2px solid rgba(79, 70, 229, 0.1);
+    }
+
+    .help-card .card-title {
+        color: var(--text-primary);
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+
+    .help-card ul li {
+        color: var(--text-secondary);
+        padding: 0.5rem 0;
+        transition: all 0.3s ease;
+    }
+
+    .help-card ul li:hover {
+        color: var(--text-primary);
+        transform: translateX(5px);
+    }
+
+    /* Animations */
+    
+
+    .animate-fade-in {
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .animate-slide-up {
+        animation: slideUp 0.6s ease-out;
+        animation-fill-mode: both;
+    }
+
+    /* Responsive */
+    
+</style>
+
