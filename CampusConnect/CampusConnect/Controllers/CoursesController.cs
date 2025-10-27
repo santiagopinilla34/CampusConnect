@@ -133,6 +133,8 @@ namespace CampusConnect.Controllers
 
             var course = await _context.Courses.FirstOrDefaultAsync(c => c.CourseId == id);
             if (course == null) return NotFound();
+            var enrolledCount = _context.Enrollments.Count(e => e.CourseId == course.CourseId);
+            course.StudentsEnrolled = enrolledCount;
 
             return View(course);
         }

@@ -74,7 +74,7 @@
                                 <i class="fas fa-undo"></i>
                             </button>
                         </div>
-                        <span asp-validation-for="Code" class="text-danger small mt-1 d-block"></span>
+                        
                         <div class="form-comparison mt-2">
                             <small class="text-muted">
                                 <i class="fas fa-history me-1"></i>Original: <strong>@Model.Code</strong>
@@ -133,38 +133,7 @@
                         </div>
                     </div>
 
-                    <!-- Students Enrolled -->
-                    <div class="form-group mb-5">
-                        <label asp-for="StudentsEnrolled" class="form-label">
-                            <i class="fas fa-users me-2 text-primary"></i>Students Enrolled
-                            <span class="required-indicator">*</span>
-                        </label>
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="fas fa-user-graduate"></i>
-                            </span>
-                            <input asp-for="StudentsEnrolled" type="number" class="form-control form-control-lg" placeholder="0" min="0" max="200" id="enrollmentInput" />
-                            <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('StudentsEnrolled').value = '@Model.StudentsEnrolled'" title="Reset to original">
-                                <i class="fas fa-undo"></i>
-                            </button>
-                        </div>
-                        <span asp-validation-for="StudentsEnrolled" class="text-danger small mt-1 d-block"></span>
-                        <div class="form-comparison mt-2">
-                            <small class="text-muted">
-                                <i class="fas fa-history me-1"></i>Original: <strong>@Model.StudentsEnrolled students</strong>
-                            </small>
-                        </div>
-                        <div class="enrollment-preview mt-3 p-3 rounded" id="enrollmentPreview">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <small class="text-muted">Enrollment Capacity</small>
-                                <small class="text-muted"><span id="previewCount">@Model.StudentsEnrolled</span> / 50 students</small>
-                            </div>
-                            <div class="progress" style="height: 10px;">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: @((Model.StudentsEnrolled / 50.0 * 100))%" id="progressBar"></div>
-                            </div>
-                        </div>
-                    </div>
-
+                    
                     <!-- Change Summary -->
                     <div class="card changes-card mb-4" id="changesCard" style="display: none;">
                         <div class="card-body">
